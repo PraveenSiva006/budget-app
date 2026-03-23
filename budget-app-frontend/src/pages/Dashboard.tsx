@@ -2,11 +2,11 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import DatePicker from "@/components/common/DatePicker";
 
-export default function App() {
+export default function Dashboard() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   return (
-    <div className="flex h-screen items-center justify-center ">
+    <div className="flex h-full items-center justify-center ">
       Budget App UI Ready 🚀
       <Button>HI</Button>
       <DatePicker date={date} setDate={setDate} className="min-w-[150px]" />
