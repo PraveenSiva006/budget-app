@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    /* Language */
+    "target": "ES2023",
+
+    /* Type System */
+    "strict": true,
+
+    /* Interop & Safety */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+
+    /* Performance */
+    "skipLibCheck": true
+  }
+}
