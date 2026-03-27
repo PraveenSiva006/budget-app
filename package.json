@@ -9,6 +9,6 @@
   },
   "devDependencies": {
     "turbo": "^2.8.20",
-    "typescript": "^6.0.2"
+    "typescript": "^5.4.5"
   }
 }
