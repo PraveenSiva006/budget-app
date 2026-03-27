@@ -252,7 +252,7 @@ function ATMCard({ account }: { account: AccountDTO }) {
             position: "relative",
             overflow: "hidden",
             background: theme.background,
-            boxShadow: theme.boxShadow,
+            // boxShadow: theme.boxShadow,
             transform: cardTransform,
             transition: "transform 0.45s cubic-bezier(0.23,1,0.32,1)",
             cursor: "pointer",
@@ -484,7 +484,7 @@ function ATMCard({ account }: { account: AccountDTO }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function Accounts() {
+export default function AccountsRef() {
   const [accounts] = useState<AccountDTO[]>([
     {
       id: "1",
