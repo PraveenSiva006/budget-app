@@ -9,7 +9,7 @@ export default function Dashboard() {
     <div className="flex h-full items-center justify-center ">
       Budget App UI Ready 🚀
       <Button>HI</Button>
-      <DatePicker date={date} setDate={setDate} className="min-w-[150px]" />
+      <DatePicker date={date} setDate={setDate} className="min-w-37.5" />
     </div>
   );
 }

@@ -36,7 +36,12 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          patterns: ["@/features/*", "@/components/*", "@/hooks/*"],
+          patterns: [
+            "@/pages/*",
+            "@/features/*",
+            "@/components/*",
+            "@/hooks/*",
+          ],
         },
       ],
     },

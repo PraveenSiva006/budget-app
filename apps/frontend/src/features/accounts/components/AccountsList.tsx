@@ -1,7 +1,7 @@
 import AccountCard from "@/features/accounts/components/AccountCard";
 import type { AccountDTO } from "@budget/types";
 
-function Accounts() {
+function AccountsList() {
   const accounts: AccountDTO[] = [
     {
       id: "1",
@@ -40,12 +40,18 @@ function Accounts() {
   ];
 
   return (
-    <div className="font-sans p-7 grid grid-cols-4 gap-3">
+    <div
+      className="p-7 grid"
+      style={{
+        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        gap: "20px",
+      }}
+    >
       {accounts.map((account) => (
-        <AccountCard account={account} key={account.id} />
+        <AccountCard account={account} key={account.id} className="w-full" />
       ))}
     </div>
   );
 }
 
-export default Accounts;
+export default AccountsList;

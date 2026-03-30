@@ -1,2 +1,3 @@
 export { default as Dashboard } from "./Dashboard";
-export { default as Accounts } from "./Accounts";
+export { default as AccountsPage } from "./AccountsPage";
+export { default as LoginPage } from "./Login";

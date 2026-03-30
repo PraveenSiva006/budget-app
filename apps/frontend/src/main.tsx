@@ -2,15 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import "./index.css";
-import MainLayout from "@/layout/MainLayout";
-import AppRoutes from "@/routes/AppRoutes";
+import App from "@/App";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <MainLayout>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </MainLayout>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );

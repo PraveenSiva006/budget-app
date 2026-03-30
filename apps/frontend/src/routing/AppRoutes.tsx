@@ -1,12 +1,13 @@
 import AccountsRef from "@/features/accounts/AccountsReference";
-import { Accounts, Dashboard } from "@/pages";
+import { AccountsPage, Dashboard, LoginPage } from "@/pages";
 import { Route, Routes } from "react-router";
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />} />
-      <Route path="/accounts" element={<Accounts />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/accounts" element={<AccountsPage />} />
       <Route path="/accountsref" element={<AccountsRef />} />
     </Routes>
   );

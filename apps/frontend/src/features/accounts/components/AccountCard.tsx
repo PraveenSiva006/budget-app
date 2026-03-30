@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { AccountDTO, AccountType } from "@budget/types";
 import clsx from "clsx";
 import { Edit2, Wallet } from "lucide-react";
@@ -51,9 +52,20 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
     );
   }
 }
-function AccountCard({ account }: { account: AccountDTO }) {
+function AccountCard({
+  account,
+  className,
+}: {
+  account: AccountDTO;
+  className: string;
+}) {
   return (
-    <div className="border border-t-2 border-r-3 rounded-xl p-4 flex flex-col">
+    <div
+      className={cn(
+        "border border-t-2 border-r-3 rounded-xl p-4 flex flex-col",
+        className,
+      )}
+    >
       <div className="flex justify-between">
         <div className="text-xl font-semibold uppercase tracking-wider">
           {account.name}
@@ -67,7 +79,7 @@ function AccountCard({ account }: { account: AccountDTO }) {
           {account.type?.replaceAll("_", " ")}
         </span>
       </div>
-      <div className="font-mono tracking-widest my-4">{account.accNumber}</div>
+      <div className="font-mono tracking-widest h-16">{account.accNumber}</div>
       <div className=" flex justify-between items-end mt-auto">
         <div>
           <div className="text-[10px] uppercase font-semibold">Currency</div>
