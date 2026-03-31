@@ -79,7 +79,9 @@ function AccountCard({
           {account.type?.replaceAll("_", " ")}
         </span>
       </div>
-      <div className="font-mono tracking-widest h-16">{account.accNumber}</div>
+      <div className="font-mono flex items-center tracking-widest h-16">
+        {account.accNumber}
+      </div>
       <div className=" flex justify-between items-end mt-auto">
         <div>
           <div className="text-[10px] uppercase font-semibold">Currency</div>

@@ -6,12 +6,12 @@ import UnauthRoutes from "@/routing/UnauthRoutes";
 function App() {
   return (
     <>
-      {/* <MainLayout>
+      <MainLayout>
         <AppRoutes />
-      </MainLayout> */}
-      <AuthLayout>
+      </MainLayout>
+      {/* <AuthLayout>
         <UnauthRoutes />
-      </AuthLayout>
+      </AuthLayout> */}
     </>
   );
 }
