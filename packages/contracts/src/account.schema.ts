@@ -7,6 +7,15 @@ export const accountTypeEnum = z.enum([
   "WALLET",
 ]);
 
+export const createAccountSchema = z.object({
+  name: z.string().min(4),
+  type: accountTypeEnum,
+  accNumber: z.string().optional(),
+  currency: z.string().min(1),
+});
+
+export const updateAccountSchema = createAccountSchema.partial();
+
 export const accountSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
@@ -17,16 +26,31 @@ export const accountSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const createAccountSchema = z.object({
-  name: z.string().min(4),
-  type: accountTypeEnum,
-  accNumber: z.string().optional(),
-  currency: z.string().min(1),
-});
+/* ---------- TYPES ---------- */
 
-export const updateAccountSchema = createAccountSchema.partial();
+type _AccountType = z.infer<typeof accountTypeEnum>;
+export type AccountType = _AccountType;
 
-export type AccountDTO = z.infer<typeof accountSchema>;
-export type CreateAccountDTO = z.infer<typeof createAccountSchema>;
-export type UpdateAccountDTO = z.infer<typeof updateAccountSchema>;
-export type AccountType = z.infer<typeof accountTypeEnum>;
+export interface CreateAccountDTO {
+  name: string;
+  type: AccountType;
+  accNumber?: string;
+  currency: string;
+}
+
+export interface UpdateAccountDTO {
+  name?: string;
+  type?: AccountType;
+  accNumber?: string;
+  currency?: string;
+}
+
+export interface AccountDTO {
+  id: string;
+  name: string;
+  type: AccountType;
+  accNumber?: string;
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -18,23 +18,22 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
       },
     };
 
-    const circleAColor = circleColors[cardType].circleA;
-    const circleBColor = circleColors[cardType].circleB;
+    const { circleA, circleB } =
+      circleColors[cardType as keyof typeof circleColors];
 
     return (
       <div className="flex">
         <div
           className={clsx(
             "h-7 w-7 rounded-full opacity-85 translate-x-2.5",
-            circleAColor,
+            circleA,
           )}
-        ></div>
-        <div
-          className={clsx("h-7 w-7 rounded-full opacity-85", circleBColor)}
-        ></div>
+        />
+        <div className={clsx("h-7 w-7 rounded-full opacity-85", circleB)} />
       </div>
     );
   }
+
   if (cardType === "CASH") {
     return (
       <div className="inline-flex items-center justify-center w-8 h-8 text-green-500 border border-green-500 rounded-full font-serif font-semibold text-lg">
@@ -42,6 +41,7 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
       </div>
     );
   }
+
   if (cardType === "WALLET") {
     return (
       <Wallet
@@ -52,6 +52,8 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
       />
     );
   }
+
+  return null; // ✅ important for TS
 }
 
 function AccountCard({

@@ -24,6 +24,14 @@ export default defineConfig([
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    overrides: [
+      {
+        files: ["components/ui/**/*.{js,jsx,ts,tsx}"],
+        rules: {
+          "react-refresh/only-export-components": "off",
+        },
+      },
+    ],
   },
 
   // ----------------------------

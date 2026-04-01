@@ -3,14 +3,13 @@
   "compilerOptions": {
     "target": "ES2023",
 
-    "composite": true,
+    // "composite": true, // on this when multiple packages with ts been created in future
 
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
 
     "declaration": true,
     "declarationMap": true,
-    "noEmit": false,
 
     "rootDir": "src",
     "outDir": "dist",
