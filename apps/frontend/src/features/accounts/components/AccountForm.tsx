@@ -1,4 +1,3 @@
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FieldGroup } from "@/components/ui/field";
@@ -13,9 +12,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { AppFormProvider, FormInput, FormSelect } from "@/lib/form";
-import { accountFormSchema } from "@budget/contracts";
-
-type Schema = z.infer<typeof accountFormSchema>;
+import { createAccountSchema, type CreateAccountDTO } from "@budget/contracts";
 
 function AccountForm({
   open,
@@ -24,14 +21,15 @@ function AccountForm({
   open: boolean;
   closeForm: () => void;
 }) {
-  const defaultValues: Schema = {
-    accName: "",
-    accType: "",
-    accNum: "",
+  const defaultValues: CreateAccountDTO = {
+    name: "",
+    type: "BANK",
+    accNumber: "",
+    currency: "INR",
   };
 
-  const form = useForm<Schema>({
-    resolver: zodResolver(accountFormSchema),
+  const form = useForm<CreateAccountDTO>({
+    resolver: zodResolver(createAccountSchema),
     defaultValues,
   });
 
@@ -39,7 +37,7 @@ function AccountForm({
     formState: { isSubmitting },
   } = form;
 
-  const handleSubmit = form.handleSubmit(async (data: Schema) => {
+  const handleSubmit = form.handleSubmit(async (data: CreateAccountDTO) => {
     try {
       console.log(data);
       form.reset();
@@ -70,13 +68,12 @@ function AccountForm({
           <form onSubmit={handleSubmit}>
             <FieldGroup className="grid md:grid-cols-6 gap-4 mb-6">
               <FormInput
-                name="accName"
+                name="name"
                 label="Account Name*"
                 placeholder="eg: SBI, Cash, PhonePe Wallet"
               />
-
               <FormSelect
-                name="accType"
+                name="type"
                 label="Account Type*"
                 placeholder="Select Account type"
                 options={[
@@ -86,11 +83,16 @@ function AccountForm({
                   { value: "WALLET", label: "Wallet" },
                 ]}
               />
-
               <FormInput
-                name="accNum"
+                name="accNumber"
                 label="Account Number"
                 placeholder="eg: your 12 digit acc number"
+              />
+              <FormSelect
+                name="currency"
+                label="Currency*"
+                placeholder="Select Currency"
+                options={[{ value: "INR", label: "Indian INR" }]}
               />
             </FieldGroup>
 

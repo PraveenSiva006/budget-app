@@ -1,32 +1,30 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    /* Project references */
+    "target": "ES2023",
+
     "composite": true,
 
-    /* Output */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,
+    "noEmit": false,
 
-    /* Structure */
     "rootDir": "src",
     "outDir": "dist",
 
-    /* Safety */
+    "strict": true,
+    "skipLibCheck": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": false,
+
     "stripInternal": true
   },
-  "include": ["src"],
-  /* Language */
-  "target": "ES2023",
-
-  /* Type System */
-  "strict": true,
-
-  /* Interop & Safety */
-  "esModuleInterop": true,
-  "forceConsistentCasingInFileNames": true,
-  "isolatedModules": true,
-
-  /* Performance */
-  "skipLibCheck": true
+  "include": ["src"]
 }
