@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { AppFormProvider, FormInput, FormSelect } from "@/lib/form";
-import { accountFormSchema } from "@/features/accounts/account.schema";
+import { accountFormSchema } from "@budget/contracts";
 
 type Schema = z.infer<typeof accountFormSchema>;
 

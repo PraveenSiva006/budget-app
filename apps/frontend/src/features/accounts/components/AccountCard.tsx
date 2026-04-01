@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { AccountDTO, AccountType } from "@budget/types";
+import type { AccountDTO, AccountType } from "@budget/contracts";
+
 import clsx from "clsx";
 import { Edit2, Wallet } from "lucide-react";
 
@@ -52,6 +53,7 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
     );
   }
 }
+
 function AccountCard({
   account,
   className,

@@ -1,5 +1,5 @@
 import AccountCard from "@/features/accounts/components/AccountCard";
-import type { AccountDTO } from "@budget/types";
+import type { AccountDTO } from "@budget/contracts";
 
 function AccountsList({ onAdd }: { onAdd: () => void }) {
   const accounts: AccountDTO[] = [

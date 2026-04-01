@@ -1,6 +1,6 @@
+import type { AccountDTO, AccountType } from "@budget/contracts";
 import { useState } from "react";
 import type { CSSProperties } from "react";
-import type { AccountDTO, AccountType } from "@budget/types";
 
 // ─── Per-type theme config ────────────────────────────────────────────────────
 
