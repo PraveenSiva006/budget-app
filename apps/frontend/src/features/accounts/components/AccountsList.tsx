@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import AccountCard from "@/features/accounts/components/AccountCard";
 import type { AccountDTO } from "@budget/contracts";
 
@@ -50,15 +51,15 @@ function AccountsList({ onAdd }: { onAdd: () => void }) {
       {accounts.map((account) => (
         <AccountCard account={account} key={account.id} className="w-full" />
       ))}
-      <div
+      <Card
         onClick={onAdd}
-        className="w-full cursor-pointer h-48 flex justify-center items-center border-2 border-dashed bg-[#fdfdfd] opacity-80 rounded-xl"
+        className="w-full cursor-pointer h-48 flex justify-center items-center border-2 border-dashed bg-neutral-50 dark:bg-gray-900 rounded-xl"
       >
         <div className="relative">
           <span className="inline-block rounded-xs h-2.5 w-20 bg-zinc-200 translate-x-[50%]"></span>
           <span className="inline-block rounded-xs h-2.5 w-20 bg-zinc-200 -translate-x-[50%] rotate-90"></span>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { AccountDTO, AccountType } from "@budget/contracts";
 
 import clsx from "clsx";
-import { Edit2, Wallet } from "lucide-react";
+import { Edit2, HandCoins, Wallet } from "lucide-react";
 
 function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
   if (cardType === "BANK" || cardType === "CREDIT_CARD") {
@@ -36,20 +37,17 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
 
   if (cardType === "CASH") {
     return (
-      <div className="inline-flex items-center justify-center w-8 h-8 text-green-500 border border-green-500 rounded-full font-serif font-semibold text-lg">
-        ₹
+      <div className="inline-flex items-center justify-center w-9 h-9 bg-green-50 dark:bg-background rounded-full text-green-400">
+        <HandCoins size={22} strokeWidth={0.8} />
       </div>
     );
   }
 
   if (cardType === "WALLET") {
     return (
-      <Wallet
-        className="text-purple-700"
-        size={26}
-        strokeWidth={0.8}
-        absoluteStrokeWidth
-      />
+      <div className="inline-flex items-center justify-center w-9 h-9 bg-purple-50 dark:bg-background rounded-full text-purple-500">
+        <Wallet size={20} strokeWidth={0.8} />
+      </div>
     );
   }
 
@@ -64,9 +62,9 @@ function AccountCard({
   className: string;
 }) {
   return (
-    <div
+    <Card
       className={cn(
-        "border border-t-2 border-r-3 rounded-xl p-4 flex flex-col",
+        "border-t-2 border-r-3 rounded-xl p-4 gap-0 dark:bg-gray-900",
         className,
       )}
     >
@@ -93,7 +91,7 @@ function AccountCard({
         </div>
         <AccCardBottomIcon cardType={account.type} />
       </div>
-    </div>
+    </Card>
   );
 }
 export default AccountCard;

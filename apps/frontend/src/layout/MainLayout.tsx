@@ -1,13 +1,27 @@
+import { AppSidebar } from "@/components/common/AppSidebar";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import type { ReactNode } from "react";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
-    <>
-      <div className="h-15 flex items-center px-4 border-b">
-        <AnimatedThemeToggler className="ml-auto flex items-center justify-center cursor-pointer border border-amber-300 h-10 w-10 rounded-full" />
-      </div>
-      <div className={"h-[calc(100vh-60px)]"}>{children}</div>
-    </>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex w-full h-16 shrink-0 items-center border-b gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2" />
+          </div>
+          <AnimatedThemeToggler className="ml-auto mr-5 cursor-pointer border flex items-center justify-center rounded-full w-9 h-9" />
+        </header>
+        <div>{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

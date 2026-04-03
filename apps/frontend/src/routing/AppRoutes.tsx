@@ -7,8 +7,8 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Dashboard />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/accounts" element={<AccountsPage />} />
       <Route path="/accountsref" element={<AccountsRef />} />
+      <Route path="/accounts" element={<AccountsPage />} />
     </Routes>
   );
 }
