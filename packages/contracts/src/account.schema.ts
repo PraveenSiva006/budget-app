@@ -8,7 +8,7 @@ export const accountTypeEnum = z.enum([
 ]);
 
 export const createAccountSchema = z.object({
-  name: z.string().min(4),
+  name: z.string().min(2),
   type: accountTypeEnum,
   accNumber: z.string().optional(),
   currency: z.string().min(1),

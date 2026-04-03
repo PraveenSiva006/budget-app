@@ -50,16 +50,16 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
       </div>
     );
   }
-
-  return null; // ✅ important for TS
 }
 
 function AccountCard({
   account,
   className,
+  onEdit,
 }: {
   account: AccountDTO;
   className: string;
+  onEdit: (account: AccountDTO) => void;
 }) {
   return (
     <Card
@@ -72,7 +72,12 @@ function AccountCard({
         <div className="text-xl font-semibold uppercase tracking-wider">
           {account.name}
         </div>
-        <Button variant={"outline"} className="h-fit rounded-sm p-1">
+
+        <Button
+          variant="outline"
+          className="h-fit rounded-sm p-1"
+          onClick={() => onEdit(account)}
+        >
           <Edit2 />
         </Button>
       </div>

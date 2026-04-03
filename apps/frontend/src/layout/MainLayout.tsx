@@ -20,7 +20,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
           </div>
           <AnimatedThemeToggler className="ml-auto mr-5 cursor-pointer border flex items-center justify-center rounded-full w-9 h-9" />
         </header>
-        <div>{children}</div>
+        <div className="pt-5">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

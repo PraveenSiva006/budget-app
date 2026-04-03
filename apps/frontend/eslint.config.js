@@ -40,7 +40,7 @@ export default defineConfig([
 
   // 1. ROUTES → only pages
   {
-    files: ["src/routes/**"],
+    files: ["src/routing/**"],
     plugins: {
       import: importPlugin,
     },
@@ -70,14 +70,14 @@ export default defineConfig([
         "error",
         {
           patterns: [
-            "@/routes/*", // ❌ prevent reverse dependency
+            "@/routing/*", // ❌ prevent reverse dependency
           ],
         },
       ],
     },
   },
 
-  // 3. FEATURES → cannot depend on pages/routes
+  // 3. FEATURES → cannot depend on pages/routing
   {
     files: ["src/features/**"],
     plugins: {
@@ -87,7 +87,7 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          patterns: ["@/pages", "@/pages/*", "@/routes/*"],
+          patterns: ["@/pages", "@/pages/*", "@/routing/*"],
         },
       ],
     },
@@ -103,7 +103,7 @@ export default defineConfig([
       "no-restricted-imports": [
         "error",
         {
-          patterns: ["@/features/*", "@/pages", "@/pages/*", "@/routes/*"],
+          patterns: ["@/features/*", "@/pages", "@/pages/*", "@/routing/*"],
         },
       ],
     },
