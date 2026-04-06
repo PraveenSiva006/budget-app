@@ -12,17 +12,21 @@ import {
 } from "@budget/contracts";
 
 function AccountForm({
-  closeForm,
-  editItem,
+  onSuccess,
+  onCancel,
+  account,
+  mode,
 }: {
-  closeForm: () => void;
-  editItem: AccountDTO | null;
+  onSuccess: () => void;
+  onCancel: () => void;
+  account: AccountDTO | null;
+  mode: "create" | "edit" | "closed";
 }) {
   const defaultValues: CreateAccountDTO = {
-    name: editItem?.name || "",
-    type: editItem?.type || "BANK",
-    accNumber: editItem?.accNumber || "",
-    currency: editItem?.currency || "INR",
+    name: account?.name || "",
+    type: account?.type || "BANK",
+    accNumber: account?.accNumber || "",
+    currency: account?.currency || "INR",
   };
 
   const form = useForm<CreateAccountDTO>({
@@ -38,7 +42,7 @@ function AccountForm({
     try {
       console.log(data);
       form.reset();
-      closeForm();
+      onSuccess();
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
@@ -83,10 +87,15 @@ function AccountForm({
         </FieldGroup>
 
         <DialogFooter>
-          <Button variant={"outline"} disabled={isSubmitting}>
+          <Button
+            type="button"
+            variant={"outline"}
+            disabled={isSubmitting}
+            onClick={onCancel}
+          >
             Cancel
           </Button>
-          <Button disabled={isSubmitting}>
+          <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </DialogFooter>

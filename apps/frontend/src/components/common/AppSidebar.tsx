@@ -1,4 +1,3 @@
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import {
   Sidebar,
   SidebarContent,

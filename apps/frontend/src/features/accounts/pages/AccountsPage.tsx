@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,16 +8,15 @@ import {
 } from "@/components/ui/dialog";
 import AccountForm from "@/features/accounts/components/AccountForm";
 import AccountsList from "@/features/accounts/components/AccountsList";
+import { useAccountUIStore } from "@/features/accounts/store/accounts.store";
 import type { AccountDTO } from "@budget/contracts";
-import { useState } from "react";
 
 function AccountsPage() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editItem, setEditItem] = useState<AccountDTO | null>(null);
+  const deleteConfirm = useAccountUIStore((s) => s.deleteConfirm);
+  const closeDeleteConfirm = useAccountUIStore((s) => s.closeDeleteConfirm);
 
-  const openForm = () => setIsFormOpen(true);
-
-  const closeForm = () => setIsFormOpen(false);
+  const form = useAccountUIStore((s) => s.form);
+  const closeForm = useAccountUIStore((s) => s.closeForm);
 
   const accounts: AccountDTO[] = [
     {
@@ -57,29 +57,42 @@ function AccountsPage() {
 
   return (
     <>
-      <AccountsList
-        accounts={accounts}
-        onAdd={openForm}
-        onEdit={(account) => {
-          setEditItem(account);
-          openForm();
-        }}
-      />
+      <AccountsList accounts={accounts} />
 
-      <Dialog
-        open={isFormOpen}
-        onOpenChange={(open) => {
-          setIsFormOpen(open);
-          if (!open) setEditItem(null);
-        }}
-      >
+      <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>Account</DialogTitle>
             <DialogDescription>Add or Edit Account</DialogDescription>
           </DialogHeader>
 
-          <AccountForm editItem={editItem} closeForm={closeForm} />
+          <AccountForm
+            account={form.mode === "edit" ? form.account : null}
+            onSuccess={closeForm}
+            onCancel={closeForm}
+            mode={form.mode}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={deleteConfirm.open} onOpenChange={closeDeleteConfirm}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Account</DialogTitle>
+            <DialogDescription>
+              Deleting a record is irreversible
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="text-lg">Are you sure on deleting this item?</div>
+          <div className="flex justify-end gap-2">
+            <Button variant={"secondary"} onClick={closeDeleteConfirm}>
+              Cancel
+            </Button>
+            <Button variant={"destructive"} onClick={closeDeleteConfirm}>
+              Delete
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </>

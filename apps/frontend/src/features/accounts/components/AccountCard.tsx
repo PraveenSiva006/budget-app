@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import AccountActionMenu from "@/features/accounts/components/AccountActionMenu";
+import { useAccountUIStore } from "@/features/accounts/store/accounts.store";
+
 import { cn } from "@/lib/utils";
 import type { AccountDTO, AccountType } from "@budget/contracts";
 
 import clsx from "clsx";
-import { Edit2, HandCoins, Wallet } from "lucide-react";
+import { HandCoins, Wallet } from "lucide-react";
 
 function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
   if (cardType === "BANK" || cardType === "CREDIT_CARD") {
@@ -55,12 +57,12 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
 function AccountCard({
   account,
   className,
-  onEdit,
 }: {
   account: AccountDTO;
   className: string;
-  onEdit: (account: AccountDTO) => void;
 }) {
+  const handleAction = useAccountUIStore((s) => s.handleAction);
+
   return (
     <Card
       className={cn(
@@ -73,13 +75,12 @@ function AccountCard({
           {account.name}
         </div>
 
-        <Button
-          variant="outline"
-          className="h-fit rounded-sm p-1"
-          onClick={() => onEdit(account)}
-        >
-          <Edit2 />
-        </Button>
+        <AccountActionMenu
+          actions={{
+            edit: () => handleAction({ type: "edit", payload: account }),
+            delete: () => handleAction({ type: "delete", payload: account }),
+          }}
+        />
       </div>
       <div>
         <span className="inline-block uppercase border rounded px-2 text-[10px] leading-4 font-bold tracking-wider">
