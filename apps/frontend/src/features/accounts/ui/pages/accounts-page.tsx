@@ -6,9 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import AccountForm from "@/features/accounts/components/AccountForm";
-import AccountsList from "@/features/accounts/components/AccountsList";
-import { useAccountUIStore } from "@/features/accounts/store/accounts.store";
+import AccountForm from "@/features/accounts/ui/forms/account-form";
+import AccountsList from "@/features/accounts/ui/components/account-list";
+import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 import type { AccountDTO } from "@budget/contracts";
 
 function AccountsPage() {

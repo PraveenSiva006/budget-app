@@ -15,7 +15,6 @@ function AccountForm({
   onSuccess,
   onCancel,
   account,
-  mode,
 }: {
   onSuccess: () => void;
   onCancel: () => void;

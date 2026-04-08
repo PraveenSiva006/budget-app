@@ -2,6 +2,7 @@
   "compilerOptions": {
     /* Language */
     "target": "ES2023",
+    "ignoreDeprecations": "6.0",
 
     /* Type System */
     "strict": true,

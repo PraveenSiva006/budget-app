@@ -1,7 +1,7 @@
 // use-form-field.ts
 import { useFormContext, useController } from "react-hook-form";
 
-export function useFormField(name: string) {
+export default function useFormField(name: string) {
   const { control } = useFormContext();
 
   const { field, fieldState } = useController({

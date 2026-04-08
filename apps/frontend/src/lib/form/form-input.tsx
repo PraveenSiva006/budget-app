@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { useFormField } from "./useFormField";
+import useFormField from "./use-form-field";
 
-export function FormInput({
+export default function FormInput({
   name,
   label,
   placeholder,

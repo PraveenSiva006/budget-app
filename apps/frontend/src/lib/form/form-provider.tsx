@@ -1,11 +1,10 @@
-// form-provider.tsx
 import {
   FormProvider,
   type UseFormReturn,
   type FieldValues,
 } from "react-hook-form";
 
-export function AppFormProvider<T extends FieldValues>({
+export default function AppFormProvider<T extends FieldValues>({
   form,
   children,
 }: {

@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
-import AccountActionMenu from "@/features/accounts/components/AccountActionMenu";
-import { useAccountUIStore } from "@/features/accounts/store/accounts.store";
+import AccountActionMenu from "@/features/accounts/ui/components/account-action-menu";
+import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 
 import { cn } from "@/lib/utils";
 import type { AccountDTO, AccountType } from "@budget/contracts";
@@ -63,6 +63,11 @@ function AccountCard({
 }) {
   const handleAction = useAccountUIStore((s) => s.handleAction);
 
+  const cardActions = {
+    edit: () => handleAction({ type: "edit", payload: account }),
+    delete: () => handleAction({ type: "delete", payload: account }),
+  };
+
   return (
     <Card
       className={cn(
@@ -75,12 +80,7 @@ function AccountCard({
           {account.name}
         </div>
 
-        <AccountActionMenu
-          actions={{
-            edit: () => handleAction({ type: "edit", payload: account }),
-            delete: () => handleAction({ type: "delete", payload: account }),
-          }}
-        />
+        <AccountActionMenu actions={cardActions} />
       </div>
       <div>
         <span className="inline-block uppercase border rounded px-2 text-[10px] leading-4 font-bold tracking-wider">

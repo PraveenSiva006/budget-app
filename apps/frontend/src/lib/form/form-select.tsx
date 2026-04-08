@@ -1,4 +1,3 @@
-// form-select.tsx
 import {
   Select,
   SelectContent,
@@ -9,14 +8,14 @@ import {
 
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 
-import { useFormField } from "./useFormField";
+import useFormField from "./use-form-field";
 
 type Option = {
   value: string;
   label: string;
 };
 
-export function FormSelect({
+export default function FormSelect({
   name,
   label,
   options,
