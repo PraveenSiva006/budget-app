@@ -6,9 +6,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import type { ReactNode } from "react";
 
-export default function MainLayout({ children }: { children: ReactNode }) {
+import { Outlet } from "react-router";
+
+export default function AppLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -20,7 +21,9 @@ export default function MainLayout({ children }: { children: ReactNode }) {
           </div>
           <AnimatedThemeToggler className="ml-auto mr-5 cursor-pointer border flex items-center justify-center rounded-full w-9 h-9" />
         </header>
-        <div className="pt-5">{children}</div>
+        <div className="pt-5">
+          <Outlet />
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

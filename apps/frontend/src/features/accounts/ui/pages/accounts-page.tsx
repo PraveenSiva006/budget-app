@@ -9,7 +9,7 @@ import {
 import AccountForm from "@/features/accounts/ui/forms/account-form";
 import AccountsList from "@/features/accounts/ui/components/account-list";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
-import type { AccountDTO } from "@budget/contracts";
+import { useAccountsData } from "@/features/accounts/ui/hooks/useAccountsData";
 
 function AccountsPage() {
   const deleteConfirm = useAccountUIStore((s) => s.deleteConfirm);
@@ -18,46 +18,14 @@ function AccountsPage() {
   const form = useAccountUIStore((s) => s.form);
   const closeForm = useAccountUIStore((s) => s.closeForm);
 
-  const accounts: AccountDTO[] = [
-    {
-      id: "1",
-      accNumber: "301235456412",
-      name: "SBI",
-      type: "BANK",
-      currency: "INR",
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: "2",
-      accNumber: "547832109876",
-      name: "HDFC",
-      type: "CREDIT_CARD",
-      currency: "INR",
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: "3",
-      name: "Cash",
-      type: "CASH",
-      currency: "INR",
-      createdAt: "",
-      updatedAt: "",
-    },
-    {
-      id: "4",
-      name: "GPay",
-      type: "WALLET",
-      currency: "INR",
-      createdAt: "",
-      updatedAt: "",
-    },
-  ];
+  const { data, isLoading } = useAccountsData();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <AccountsList accounts={accounts} />
+      <AccountsList accounts={data!} />
 
       <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
         <DialogContent className="sm:max-w-sm">
