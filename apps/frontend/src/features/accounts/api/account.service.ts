@@ -1,5 +1,5 @@
 import { accounts } from "@/features/accounts/mock/accounts.db";
-import type { AccountDTO } from "@budget/contracts";
+import type { AccountDTO, UpdateAccountDTO } from "@budget/contracts";
 
 const delay = (ms = 300) => new Promise((res) => setTimeout(res, ms));
 
@@ -34,12 +34,11 @@ export const accountService = {
   },
 
   async update(
-    id: string,
-    payload: Partial<AccountDTO>,
-  ): Promise<AccountDTO | null> {
+    payload: Partial<UpdateAccountDTO>,
+  ): Promise<UpdateAccountDTO | null> {
     await delay();
 
-    const index = accounts.findIndex((acc) => acc.id === id);
+    const index = accounts.findIndex((acc) => acc.id === payload.id);
     if (index === -1) return null;
 
     accounts[index] = {

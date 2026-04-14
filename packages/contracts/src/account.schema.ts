@@ -14,7 +14,13 @@ export const createAccountSchema = z.object({
   currency: z.string().min(1),
 });
 
-export const updateAccountSchema = createAccountSchema.partial();
+export const updateAccountSchema = z.object({
+  id: z.string(),
+  name: z.string().min(2),
+  type: accountTypeEnum,
+  accNumber: z.string().optional(),
+  currency: z.string().min(1),
+});
 
 export const accountSchema = z.object({
   id: z.string(),
@@ -39,6 +45,7 @@ export interface CreateAccountDTO {
 }
 
 export interface UpdateAccountDTO {
+  id: string;
   name?: string;
   type?: AccountType;
   accNumber?: string;

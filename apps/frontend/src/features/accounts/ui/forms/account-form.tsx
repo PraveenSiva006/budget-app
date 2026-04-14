@@ -1,5 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { FieldGroup } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
@@ -7,53 +5,61 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { AppFormProvider, FormInput, FormSelect } from "@/lib/form";
 import {
   createAccountSchema,
+  updateAccountSchema,
   type AccountDTO,
-  type CreateAccountDTO,
 } from "@budget/contracts";
+import {
+  useCreateAccount,
+  useUpdateAccount,
+} from "@/features/accounts/ui/hooks/use-account-actions";
+import { useCrudForm } from "@/lib/form/use-crud-form";
 
-function AccountForm({
-  onSuccess,
-  onCancel,
-  account,
-}: {
-  onSuccess: () => void;
-  onCancel: () => void;
-  account: AccountDTO | null;
-  mode: "create" | "edit" | "closed";
-}) {
-  const defaultValues: CreateAccountDTO = {
-    name: account?.name || "",
-    type: account?.type || "BANK",
-    accNumber: account?.accNumber || "",
-    currency: account?.currency || "INR",
-  };
+type Props =
+  | {
+      mode: "create";
+      account: null;
+      onSuccess: () => void;
+      onCancel: () => void;
+    }
+  | {
+      mode: "edit";
+      account: AccountDTO;
+      onSuccess: () => void;
+      onCancel: () => void;
+    };
 
-  const form = useForm<CreateAccountDTO>({
-    resolver: zodResolver(createAccountSchema),
-    defaultValues,
+function AccountForm({ onSuccess, onCancel, account, mode }: Props) {
+  const createMutation = useCreateAccount();
+  const updateMutation = useUpdateAccount();
+
+  const { form, onSubmit, isSubmitting } = useCrudForm({
+    schema: createAccountSchema,
+    defaultValues: {
+      name: "",
+      type: "BANK",
+      accNumber: "",
+      currency: "INR",
+    },
+    mutation: createMutation,
+    onSuccess,
   });
 
-  const {
-    formState: { isSubmitting },
-  } = form;
-
-  const handleSubmit = form.handleSubmit(async (data: CreateAccountDTO) => {
-    try {
-      console.log(data);
-      form.reset();
-      onSuccess();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      } else {
-        console.error("Unknown error", error);
-      }
-    }
+  const { form, onSubmit, isSubmitting } = useCrudForm({
+    schema: updateAccountSchema,
+    defaultValues: {
+      id: account.id,
+      name: account.name,
+      type: account.type,
+      accNumber: account.accNumber ?? "",
+      currency: account.currency,
+    },
+    mutation: updateMutation,
+    onSuccess,
   });
 
   return (
     <AppFormProvider form={form}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <FieldGroup className="grid md:grid-cols-6 gap-4 mb-6">
           <FormInput
             name="name"

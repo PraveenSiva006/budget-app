@@ -10,8 +10,11 @@ import AccountForm from "@/features/accounts/ui/forms/account-form";
 import AccountsList from "@/features/accounts/ui/components/account-list";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 import { useAccountsData } from "@/features/accounts/ui/hooks/useAccountsData";
+import { useQueryClient } from "@tanstack/react-query";
 
 function AccountsPage() {
+  const queryClient = useQueryClient();
+
   const deleteConfirm = useAccountUIStore((s) => s.deleteConfirm);
   const closeDeleteConfirm = useAccountUIStore((s) => s.closeDeleteConfirm);
 
@@ -22,6 +25,12 @@ function AccountsPage() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const onFormSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    closeForm();
+  };
+  console.log(form);
 
   return (
     <>
@@ -36,7 +45,7 @@ function AccountsPage() {
 
           <AccountForm
             account={form.mode === "edit" ? form.account : null}
-            onSuccess={closeForm}
+            onSuccess={onFormSuccess}
             onCancel={closeForm}
             mode={form.mode}
           />
