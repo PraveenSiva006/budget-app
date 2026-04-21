@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import AccountActionMenu from "@/features/accounts/ui/components/account-action-menu";
+
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 
 import { cn } from "@/lib/utils";
@@ -7,6 +7,14 @@ import type { AccountDTO, AccountType } from "@budget/contracts";
 
 import clsx from "clsx";
 import { HandCoins, Wallet } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
   if (cardType === "BANK" || cardType === "CREDIT_CARD") {
@@ -54,6 +62,29 @@ function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
   }
 }
 
+function AccountActionMenu({
+  actions,
+}: {
+  actions: {
+    edit: () => void;
+    delete: () => void;
+  };
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="h-fit rounded-sm p-1">
+          <EllipsisVertical />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-4" align="end">
+        <DropdownMenuItem onClick={actions.edit}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={actions.delete}>Delete</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function AccountCard({
   account,
   className,
@@ -76,7 +107,7 @@ function AccountCard({
       )}
     >
       <div className="flex justify-between">
-        <div className="text-xl font-semibold uppercase tracking-wider">
+        <div className="text-lg font-semibold uppercase tracking-wider">
           {account.name}
         </div>
 

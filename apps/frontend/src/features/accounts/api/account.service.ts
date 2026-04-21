@@ -34,11 +34,12 @@ export const accountService = {
   },
 
   async update(
-    payload: Partial<UpdateAccountDTO>,
+    id: string,
+    payload: UpdateAccountDTO,
   ): Promise<UpdateAccountDTO | null> {
     await delay();
 
-    const index = accounts.findIndex((acc) => acc.id === payload.id);
+    const index = accounts.findIndex((acc) => acc.id === id);
     if (index === -1) return null;
 
     accounts[index] = {

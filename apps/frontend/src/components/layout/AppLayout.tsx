@@ -21,7 +21,7 @@ export default function AppLayout() {
           </div>
           <AnimatedThemeToggler className="ml-auto mr-5 cursor-pointer border flex items-center justify-center rounded-full w-9 h-9" />
         </header>
-        <div className="pt-5">
+        <div className="container mx-auto">
           <Outlet />
         </div>
       </SidebarInset>

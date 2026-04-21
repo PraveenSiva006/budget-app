@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Landmark, WalletCards } from "lucide-react";
+import { Landmark, Settings, WalletCards } from "lucide-react";
 import { Link } from "react-router";
 
 export function AppSidebar() {
@@ -39,6 +39,12 @@ export function AppSidebar() {
             <Link to="/accounts">
               <WalletCards />
               <span>Accounts</span>
+            </Link>
+          </SidebarMenuButton>
+          <SidebarMenuButton asChild tooltip={"Categories"}>
+            <Link to="/categories">
+              <Settings />
+              <span>Categories</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenu>

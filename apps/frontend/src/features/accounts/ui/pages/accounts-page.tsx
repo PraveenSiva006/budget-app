@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import AccountForm from "@/features/accounts/ui/forms/account-form";
+// import AccountForm from "@/features/accounts/ui/forms/account-form";
 import AccountsList from "@/features/accounts/ui/components/account-list";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 import { useAccountsData } from "@/features/accounts/ui/hooks/useAccountsData";
@@ -22,6 +22,7 @@ function AccountsPage() {
   const closeForm = useAccountUIStore((s) => s.closeForm);
 
   const { data, isLoading } = useAccountsData();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -30,11 +31,10 @@ function AccountsPage() {
     queryClient.invalidateQueries({ queryKey: ["accounts"] });
     closeForm();
   };
-  console.log(form);
 
   return (
     <>
-      <AccountsList accounts={data!} />
+      <AccountsList accounts={data} />
 
       <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
         <DialogContent className="sm:max-w-sm">
@@ -43,12 +43,12 @@ function AccountsPage() {
             <DialogDescription>Add or Edit Account</DialogDescription>
           </DialogHeader>
 
-          <AccountForm
+          {/* <AccountForm
             account={form.mode === "edit" ? form.account : null}
             onSuccess={onFormSuccess}
             onCancel={closeForm}
             mode={form.mode}
-          />
+          /> */}
         </DialogContent>
       </Dialog>
 

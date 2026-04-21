@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { type CategoryDTO } from "@budget/contracts";
 import { EllipsisVertical } from "lucide-react";
 
-function AccountActionMenu({
+function CategoryActionMenu({
   actions,
 }: {
   actions: {
@@ -19,7 +19,7 @@ function AccountActionMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-fit rounded-sm p-1">
+        <Button variant="ghost" className="h-fit rounded-sm p-1">
           <EllipsisVertical />
         </Button>
       </DropdownMenuTrigger>
@@ -31,4 +31,16 @@ function AccountActionMenu({
   );
 }
 
-export default AccountActionMenu;
+function CategoryList({ list }: { list: CategoryDTO[] }) {
+  return (
+    <div className="grid grid-cols-2 gap-3">
+      {list.map((val) => (
+        <div className="border rounded p-3 flex justify-between items-center">
+          <span className="">{val.name}</span>
+          <CategoryActionMenu actions={{ edit: () => {}, delete: () => {} }} />
+        </div>
+      ))}
+    </div>
+  );
+}
+export default CategoryList;

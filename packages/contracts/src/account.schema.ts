@@ -36,22 +36,6 @@ export const accountSchema = z.object({
 
 type _AccountType = z.infer<typeof accountTypeEnum>;
 export type AccountType = _AccountType;
-
-export interface CreateAccountDTO {
-  name: string;
-  type: AccountType;
-  accNumber?: string;
-  currency: string;
-}
-
-export interface UpdateAccountDTO {
-  id: string;
-  name?: string;
-  type?: AccountType;
-  accNumber?: string;
-  currency?: string;
-}
-
 export interface AccountDTO {
   id: string;
   name: string;
@@ -61,3 +45,7 @@ export interface AccountDTO {
   createdAt: string;
   updatedAt: string;
 }
+
+type MutableAccountDTO = Omit<AccountDTO, "id" | "createdAt" | "updatedAt">;
+export type CreateAccountDTO = MutableAccountDTO;
+export type UpdateAccountDTO = Partial<MutableAccountDTO>;
