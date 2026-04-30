@@ -1,18 +1,96 @@
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryList from "@/features/categories/components/category-list";
-import { categories } from "@/features/categories/mock/categories.db";
+import CategoryCreateForm from "@/features/categories/components/create-form";
+import CategoryEditForm from "@/features/categories/components/edit-form";
+
+import {
+  useDeleteCategory,
+  useListCategory,
+} from "@/features/categories/hooks/use-category-actions";
+
 import { Plus } from "lucide-react";
 
 export default function Categories() {
+  const { data: categories } = useListCategory();
+
+  const deleteMutation = useDeleteCategory();
+
+  const { form, closeForm, deleteConfirm, closeDeleteConfirm, handleActions } =
+    useCategoryUIStore();
+
+  const onDelete = async () => {
+    if (deleteConfirm.open)
+      await deleteMutation.mutateAsync(deleteConfirm.category.id);
+    closeDeleteConfirm();
+  };
+
   return (
     <div className="py-5 px-24">
       <div className="mb-2 font-semibold flex justify-between">
         <span>Categories</span>
-        <Button variant="outline">
+        <Button
+          variant="outline"
+          onClick={() => handleActions({ type: "create" })}
+        >
           <Plus />
         </Button>
       </div>
       <CategoryList list={categories} />
+
+      <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Category</DialogTitle>
+            <DialogDescription>
+              {form.mode === "create" ? "Add" : "Edit"} Category
+            </DialogDescription>
+          </DialogHeader>
+          {form.mode === "edit" ? (
+            <CategoryEditForm category={form.category} />
+          ) : (
+            <CategoryCreateForm />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={deleteConfirm.open} onOpenChange={closeDeleteConfirm}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Account</DialogTitle>
+            <DialogDescription>
+              Deleting a record is irreversible
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="text-lg font-light">
+            Are you sure on deleting this item?
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button
+              variant={"secondary"}
+              onClick={closeDeleteConfirm}
+              disabled={deleteMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant={"destructive"}
+              onClick={onDelete}
+              disabled={deleteMutation.isPending}
+            >
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

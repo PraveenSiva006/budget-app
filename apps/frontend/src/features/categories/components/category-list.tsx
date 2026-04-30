@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCategoryUIStore } from "@/features/categories/categories.store";
 import { type CategoryDTO } from "@budget/contracts";
 import { EllipsisVertical } from "lucide-react";
 
@@ -32,12 +33,26 @@ function CategoryActionMenu({
 }
 
 function CategoryList({ list }: { list: CategoryDTO[] }) {
+  const { handleActions } = useCategoryUIStore();
+
   return (
     <div className="grid grid-cols-2 gap-3">
-      {list.map((val) => (
-        <div className="border rounded p-3 flex justify-between items-center">
-          <span className="">{val.name}</span>
-          <CategoryActionMenu actions={{ edit: () => {}, delete: () => {} }} />
+      {list.map((category) => (
+        <div
+          className="border rounded p-3 flex justify-between items-center"
+          key={category.id}
+        >
+          <span className="">{category.name}</span>
+          <CategoryActionMenu
+            actions={{
+              edit: () => {
+                handleActions({ type: "edit", payload: category });
+              },
+              delete: () => {
+                handleActions({ type: "delete", payload: category });
+              },
+            }}
+          />
         </div>
       ))}
     </div>

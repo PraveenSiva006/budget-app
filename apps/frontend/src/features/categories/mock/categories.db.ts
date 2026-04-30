@@ -76,62 +76,6 @@ export const categories: CategoryDTO[] = [
     createdAt: now(),
     updatedAt: now(),
   },
-  {
-    id: "11",
-    name: "Fuel",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "12",
-    name: "Entertainment",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "13",
-    name: "Shopping",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "14",
-    name: "Healthcare",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "15",
-    name: "Education",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "16",
-    name: "Subscriptions",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "17",
-    name: "Insurance",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
-  {
-    id: "18",
-    name: "Taxes",
-    type: "EXPENSE",
-    createdAt: now(),
-    updatedAt: now(),
-  },
 
   // TRANSFER
   {

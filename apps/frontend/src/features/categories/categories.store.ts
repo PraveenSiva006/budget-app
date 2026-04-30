@@ -1,37 +1,52 @@
-import type { CreateCategoryDTO } from "@budget/contracts";
+import type { CategoryDTO } from "@budget/contracts";
 import { create } from "zustand";
 
-type ActionType = "create" | "edit" | "delete";
-type Action = {
-  type: ActionType;
-  data: CreateCategoryDTO;
+type FormState =
+  | { mode: "closed" }
+  | { mode: "create" }
+  | { mode: "edit"; category: CategoryDTO };
+
+type DeleteConfirmState =
+  | { open: false }
+  | { open: true; category: CategoryDTO };
+
+type Action =
+  | { type: "create" }
+  | { type: "edit"; payload: CategoryDTO }
+  | { type: "delete"; payload: CategoryDTO };
+
+type CategoryUIState = {
+  form: FormState;
+  deleteConfirm: DeleteConfirmState;
+
+  handleActions: (action: Action) => void;
+  closeForm: () => void;
+  closeDeleteConfirm: () => void;
 };
 
-export const categoryStore = create((set) => {
-  return {
-    form: { mode: "closed" },
-    deleteConfirm: { mode: "closed" },
+export const useCategoryUIStore = create<CategoryUIState>((set) => ({
+  form: { mode: "closed" },
+  deleteConfirm: { open: false },
 
-    handleActions: (action: Action) => {
-      switch (action.type) {
-        case "create":
-          set({ form: { mode: "open" } });
-          break;
+  handleActions: (action) => {
+    switch (action.type) {
+      case "create":
+        set({ form: { mode: "create" } });
+        break;
 
-        case "edit":
-          set({ form: { mode: "open", data: action.data } });
-          break;
+      case "edit":
+        set({ form: { mode: "edit", category: action.payload } });
+        break;
 
-        case "delete":
-          set({ deleteConfirm: { mode: "open", data: action.data } });
-          break;
-
-        default:
-          break;
-      }
-    },
-    closeForm() {
-      set({ form: { mode: "closed" } });
-    },
-  };
-});
+      case "delete":
+        set({ deleteConfirm: { open: true, category: action.payload } });
+        break;
+    }
+  },
+  closeForm() {
+    set({ form: { mode: "closed" } });
+  },
+  closeDeleteConfirm() {
+    set({ deleteConfirm: { open: false } });
+  },
+}));
