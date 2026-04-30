@@ -20,7 +20,7 @@ function CategoryActionMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-fit rounded-sm p-1">
+        <Button variant="secondary" className="h-fit rounded-sm p-1">
           <EllipsisVertical />
         </Button>
       </DropdownMenuTrigger>
@@ -38,11 +38,12 @@ function CategoryList({ list }: { list: CategoryDTO[] }) {
   return (
     <div className="grid grid-cols-2 gap-3">
       {list.map((category) => (
-        <div
-          className="border rounded p-3 flex justify-between items-center"
-          key={category.id}
-        >
+        <div className="border rounded p-3 flex items-center" key={category.id}>
           <span className="">{category.name}</span>
+
+          <span className="ml-auto mr-3 text-capitalize text-xs bg-lime-300 px-2 rounded-lg leading-relaxed">
+            {category.type.toLowerCase()}
+          </span>
           <CategoryActionMenu
             actions={{
               edit: () => {
