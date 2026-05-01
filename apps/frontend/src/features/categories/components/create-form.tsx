@@ -1,30 +1,48 @@
-import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryForm from "@/features/categories/components/form";
 
 import { useCreateCategory } from "@/features/categories/hooks/use-category-actions";
-import { AppFormProvider } from "@/lib/form";
+import z from "zod";
 
-import { useCrudForm } from "@/lib/form/use-crud-form";
 import { createCategorySchema } from "@budget/contracts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
 
-function CategoryCreateForm() {
+type Props = {
+  onSuccess: () => void;
+  onCancel: () => void;
+};
+type CreateAccountForm = z.infer<typeof createCategorySchema>;
+
+function CategoryCreateForm({ onSuccess, onCancel }: Props) {
   const createMutation = useCreateCategory();
-  const { closeForm } = useCategoryUIStore();
 
-  const { form, isSubmitting, onSubmit } = useCrudForm({
-    schema: createCategorySchema,
-    onSuccess: closeForm,
+  const form = useForm<CreateAccountForm>({
+    resolver: zodResolver(createCategorySchema),
     defaultValues: {
       name: "",
-      type: "INCOME",
+      type: "EXPENSE",
     },
-    mutation: createMutation,
+  });
+
+  const onSubmit = form.handleSubmit(async (category) => {
+    await createMutation.mutateAsync({
+      name: category.name,
+      type: category.type,
+    });
+    form.reset();
+    onSuccess();
   });
 
   return (
-    <AppFormProvider form={form}>
-      <CategoryForm {...{ isSubmitting, onSubmit, onCancel: closeForm }} />
-    </AppFormProvider>
+    <FormProvider {...form}>
+      <CategoryForm
+        {...{
+          isSubmitting: form.formState.isSubmitting,
+          onSubmit,
+          onCancel,
+        }}
+      />
+    </FormProvider>
   );
 }
 

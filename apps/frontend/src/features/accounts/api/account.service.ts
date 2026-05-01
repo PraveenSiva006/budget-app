@@ -33,18 +33,18 @@ export const accountService = {
     return newAccount;
   },
 
-  async update(
-    id: string,
-    payload: UpdateAccountDTO,
-  ): Promise<UpdateAccountDTO | null> {
+  async update(body: {
+    id: string;
+    payload: UpdateAccountDTO;
+  }): Promise<AccountDTO | null> {
     await delay();
 
-    const index = accounts.findIndex((acc) => acc.id === id);
+    const index = accounts.findIndex((acc) => acc.id === body.id);
     if (index === -1) return null;
 
     accounts[index] = {
       ...accounts[index],
-      ...payload,
+      ...body.payload,
       updatedAt: now(),
     };
 

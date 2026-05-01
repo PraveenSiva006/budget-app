@@ -38,7 +38,10 @@ function CategoryList({ list }: { list: CategoryDTO[] }) {
   return (
     <div className="grid grid-cols-2 gap-3">
       {list.map((category) => (
-        <div className="border rounded p-3 flex items-center" key={category.id}>
+        <div
+          className="border rounded p-3 flex items-center bg-neutral-50 dark:bg-gray-900"
+          key={category.id}
+        >
           <span className="">{category.name}</span>
 
           <span className="ml-auto mr-3 text-capitalize text-xs bg-lime-300 px-2 rounded-lg leading-relaxed">

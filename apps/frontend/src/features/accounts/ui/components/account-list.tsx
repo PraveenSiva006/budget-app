@@ -14,7 +14,7 @@ function AccountsList({ accounts }: { accounts: AccountDTO[] }) {
         gap: "20px",
       }}
     >
-      {accounts.map((account) => (
+      {accounts?.map((account) => (
         <AccountCard key={account.id} account={account} className="w-full" />
       ))}
       <Card

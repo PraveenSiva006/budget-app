@@ -6,35 +6,37 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-// import AccountForm from "@/features/accounts/ui/forms/account-form";
+import AccountEditForm from "@/features/accounts/ui/forms/edit-form";
 import AccountsList from "@/features/accounts/ui/components/account-list";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
-import { useAccountsData } from "@/features/accounts/ui/hooks/useAccountsData";
-import { useQueryClient } from "@tanstack/react-query";
+import AccountCreateForm from "../forms/create-form";
+import { useDeleteAccount, useGetAccounts } from "../hooks/use-account-actions";
 
 function AccountsPage() {
-  const queryClient = useQueryClient();
+  const form = useAccountUIStore((s) => s.form);
+  const closeForm = useAccountUIStore((s) => s.closeForm);
 
   const deleteConfirm = useAccountUIStore((s) => s.deleteConfirm);
   const closeDeleteConfirm = useAccountUIStore((s) => s.closeDeleteConfirm);
 
-  const form = useAccountUIStore((s) => s.form);
-  const closeForm = useAccountUIStore((s) => s.closeForm);
+  const deleteMutation = useDeleteAccount();
 
-  const { data, isLoading } = useAccountsData();
+  const { data, isLoading } = useGetAccounts();
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const onFormSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["accounts"] });
-    closeForm();
+  const deleteAccount = async () => {
+    if (deleteConfirm.open) {
+      await deleteMutation.mutateAsync(deleteConfirm.account.id);
+      closeDeleteConfirm();
+    }
   };
 
   return (
     <>
-      <AccountsList accounts={data} />
+      <AccountsList accounts={data!} />
 
       <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
         <DialogContent className="sm:max-w-sm">
@@ -43,12 +45,15 @@ function AccountsPage() {
             <DialogDescription>Add or Edit Account</DialogDescription>
           </DialogHeader>
 
-          {/* <AccountForm
-            account={form.mode === "edit" ? form.account : null}
-            onSuccess={onFormSuccess}
-            onCancel={closeForm}
-            mode={form.mode}
-          /> */}
+          {form.mode === "edit" ? (
+            <AccountEditForm
+              account={form.account}
+              onSuccess={closeForm}
+              onCancel={closeForm}
+            />
+          ) : (
+            <AccountCreateForm onSuccess={closeForm} onCancel={closeForm} />
+          )}
         </DialogContent>
       </Dialog>
 
@@ -61,12 +66,20 @@ function AccountsPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="text-lg">Are you sure on deleting this item?</div>
+          <div className="text-base">Are you sure on deleting this item?</div>
           <div className="flex justify-end gap-2">
-            <Button variant={"secondary"} onClick={closeDeleteConfirm}>
+            <Button
+              variant={"secondary"}
+              onClick={closeDeleteConfirm}
+              disabled={deleteMutation.isPending}
+            >
               Cancel
             </Button>
-            <Button variant={"destructive"} onClick={closeDeleteConfirm}>
+            <Button
+              variant={"destructive"}
+              onClick={deleteAccount}
+              disabled={deleteMutation.isPending}
+            >
               Delete
             </Button>
           </div>

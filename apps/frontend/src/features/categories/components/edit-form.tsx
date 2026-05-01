@@ -1,40 +1,52 @@
-import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryForm from "@/features/categories/components/form";
 import { useUpdateCategory } from "@/features/categories/hooks/use-category-actions";
-import { AppFormProvider } from "@/lib/form";
 import { updateCategorySchema, type CategoryDTO } from "@budget/contracts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import type z from "zod";
 
-function CategoryEditForm({ category }: { category: CategoryDTO }) {
+type Props = {
+  category: CategoryDTO;
+  onSuccess: () => void;
+  onCancel: () => void;
+};
+
+type UpdateCategoryForm = z.infer<typeof updateCategorySchema>;
+
+function CategoryEditForm({ category, onSuccess, onCancel }: Props) {
   const updateMutation = useUpdateCategory();
 
-  const { closeForm } = useCategoryUIStore();
-
-  const form = useForm({
+  const form = useForm<UpdateCategoryForm>({
     resolver: zodResolver(updateCategorySchema),
-    defaultValues: category,
+    defaultValues: {
+      id: category.id,
+      name: category.name,
+      type: category.type,
+    },
   });
 
-  const onSubmit = form.handleSubmit(async (data) => {
+  const onSubmit = form.handleSubmit(async (category) => {
     await updateMutation.mutateAsync({
-      id: data.id,
-      payload: data,
+      id: category.id,
+      payload: {
+        name: category.name,
+        type: category.type,
+      },
     });
     form.reset();
-    closeForm();
+    onSuccess();
   });
 
   return (
-    <AppFormProvider form={form}>
+    <FormProvider {...form}>
       <CategoryForm
         {...{
           isSubmitting: updateMutation.isPending,
           onSubmit,
-          onCancel: closeForm,
+          onCancel,
         }}
       />
-    </AppFormProvider>
+    </FormProvider>
   );
 }
 

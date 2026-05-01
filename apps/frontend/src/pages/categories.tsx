@@ -54,9 +54,13 @@ export default function Categories() {
             </DialogDescription>
           </DialogHeader>
           {form.mode === "edit" ? (
-            <CategoryEditForm category={form.category} />
+            <CategoryEditForm
+              category={form.category}
+              onSuccess={closeForm}
+              onCancel={closeForm}
+            />
           ) : (
-            <CategoryCreateForm />
+            <CategoryCreateForm onSuccess={closeForm} onCancel={closeForm} />
           )}
         </DialogContent>
       </Dialog>
