@@ -1,4 +1,4 @@
-import { updateAccountSchema, type AccountDTO } from "@budget/contracts";
+import { updateAccountSchema, type Account } from "@budget/contracts";
 import { useUpdateAccount } from "@/features/accounts/ui/hooks/use-account-actions";
 
 import AccountFormUI from "./account-form-ui";
@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
 type Props = {
-  account: AccountDTO;
+  account: Account;
   onSuccess: () => void;
   onCancel: () => void;
 };

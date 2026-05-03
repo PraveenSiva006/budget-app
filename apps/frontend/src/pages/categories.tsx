@@ -10,6 +10,7 @@ import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryList from "@/features/categories/components/category-list";
 import CategoryCreateForm from "@/features/categories/components/create-form";
 import CategoryEditForm from "@/features/categories/components/edit-form";
+import axios from "axios";
 
 import {
   useDeleteCategory,
@@ -17,9 +18,18 @@ import {
 } from "@/features/categories/hooks/use-category-actions";
 
 import { Plus } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Categories() {
   const { data: categories } = useListCategory();
+  useEffect(() => {
+    const getHello = async () => {
+      const res = await axios.get("http://192.168.1.18:3000/");
+
+      console.log(res);
+    };
+    getHello();
+  }, []);
 
   const deleteMutation = useDeleteCategory();
 

@@ -1,17 +1,17 @@
-import type { AccountDTO } from "@budget/contracts";
+import type { Account } from "@budget/contracts";
 import { create } from "zustand";
 
 type AccountAction =
   | { type: "create" }
-  | { type: "edit"; payload: AccountDTO }
-  | { type: "delete"; payload: AccountDTO };
+  | { type: "edit"; payload: Account }
+  | { type: "delete"; payload: Account };
 
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "edit"; account: AccountDTO };
+  | { mode: "edit"; account: Account };
 
-type DeleteConfirmState = { open: false } | { open: true; account: AccountDTO };
+type DeleteConfirmState = { open: false } | { open: true; account: Account };
 
 interface AccountUIState {
   form: FormState;

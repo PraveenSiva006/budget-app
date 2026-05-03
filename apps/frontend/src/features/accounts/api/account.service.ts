@@ -1,5 +1,5 @@
 import { accounts } from "@/features/accounts/mock/accounts.db";
-import type { AccountDTO, UpdateAccountDTO } from "@budget/contracts";
+import type { Account, UpdateAccountInput } from "@budget/contracts";
 
 const delay = (ms = 300) => new Promise((res) => setTimeout(res, ms));
 
@@ -7,22 +7,22 @@ const generateId = () => Date.now().toString();
 const now = () => new Date().toISOString();
 
 export const accountService = {
-  async getAll(): Promise<AccountDTO[]> {
+  async getAll(): Promise<Account[]> {
     await delay();
     return [...accounts];
   },
 
-  async getById(id: string): Promise<AccountDTO | null> {
+  async getById(id: string): Promise<Account | null> {
     await delay();
     return accounts.find((acc) => acc.id === id) || null;
   },
 
   async create(
-    payload: Omit<AccountDTO, "id" | "createdAt" | "updatedAt">,
-  ): Promise<AccountDTO> {
+    payload: Omit<Account, "id" | "createdAt" | "updatedAt">,
+  ): Promise<Account> {
     await delay();
 
-    const newAccount: AccountDTO = {
+    const newAccount: Account = {
       ...payload,
       id: generateId(),
       createdAt: now(),
@@ -35,8 +35,8 @@ export const accountService = {
 
   async update(body: {
     id: string;
-    payload: UpdateAccountDTO;
-  }): Promise<AccountDTO | null> {
+    payload: UpdateAccountInput;
+  }): Promise<Account | null> {
     await delay();
 
     const index = accounts.findIndex((acc) => acc.id === body.id);

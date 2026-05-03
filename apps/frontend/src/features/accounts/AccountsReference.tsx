@@ -1,4 +1,4 @@
-import type { AccountDTO, AccountType } from "@budget/contracts";
+import type { Account, AccountType } from "@budget/contracts";
 import { useState } from "react";
 import type { CSSProperties } from "react";
 
@@ -214,7 +214,7 @@ function BottomIcon({ type, theme }: { type: AccountType; theme: CardTheme }) {
 
 // ─── Single card ──────────────────────────────────────────────────────────────
 
-function ATMCard({ account }: { account: AccountDTO }) {
+function ATMCard({ account }: { account: Account }) {
   const theme = THEMES[account.type];
   const [revealed, setRevealed] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0, active: false });
@@ -485,7 +485,7 @@ function ATMCard({ account }: { account: AccountDTO }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AccountsRef() {
-  const [accounts] = useState<AccountDTO[]>([
+  const [accounts] = useState<Account[]>([
     {
       id: "1",
       accNumber: "301235456412",

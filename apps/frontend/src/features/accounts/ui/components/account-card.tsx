@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 
 import { cn } from "@/lib/utils";
-import type { AccountDTO, AccountType } from "@budget/contracts";
+import type { Account, AccountType } from "@budget/contracts";
 
 import clsx from "clsx";
 import { HandCoins, Wallet } from "lucide-react";
@@ -89,7 +89,7 @@ function AccountCard({
   account,
   className,
 }: {
-  account: AccountDTO;
+  account: Account;
   className: string;
 }) {
   const handleAction = useAccountUIStore((s) => s.handleAction);
