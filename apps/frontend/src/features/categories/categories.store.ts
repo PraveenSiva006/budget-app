@@ -1,19 +1,17 @@
-import type { CategoryDTO } from "@budget/contracts";
+import type { Category } from "@budget/contracts";
 import { create } from "zustand";
 
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "edit"; category: CategoryDTO };
+  | { mode: "edit"; category: Category };
 
-type DeleteConfirmState =
-  | { open: false }
-  | { open: true; category: CategoryDTO };
+type DeleteConfirmState = { open: false } | { open: true; category: Category };
 
 type Action =
   | { type: "create" }
-  | { type: "edit"; payload: CategoryDTO }
-  | { type: "delete"; payload: CategoryDTO };
+  | { type: "edit"; payload: Category }
+  | { type: "delete"; payload: Category };
 
 type CategoryUIState = {
   form: FormState;

@@ -35,7 +35,7 @@ function AccountsPage() {
   };
 
   return (
-    <>
+    <div className="px-20 pt-9 ">
       <AccountsList accounts={data!} />
 
       <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
@@ -85,7 +85,7 @@ function AccountsPage() {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
 

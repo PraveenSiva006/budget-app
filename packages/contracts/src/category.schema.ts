@@ -1,6 +1,6 @@
 import * as z from "zod";
+import { TransactionType, transactionTypeEnum } from "./transaction.schema.js";
 
-export const transactionTypeEnum = z.enum(["INCOME", "EXPENSE", "TRANSFER"]);
 export const createCategorySchema = z.object({
   name: z.string().min(2),
   type: transactionTypeEnum,
@@ -22,10 +22,7 @@ export const categorySchema = z.object({
 
 /* ---------- TYPES ---------- */
 
-type _TransactionType = z.infer<typeof transactionTypeEnum>;
-export type TransactionType = _TransactionType;
-
-export interface CategoryDTO {
+export interface Category {
   id: string;
   name: string;
   type: TransactionType;
@@ -33,6 +30,6 @@ export interface CategoryDTO {
   updatedAt: string;
 }
 
-type MutableCategory = Omit<CategoryDTO, "id" | "createdAt" | "updatedAt">;
-export type CreateCategoryDTO = MutableCategory;
-export type UpdateCategoryDTO = Partial<MutableCategory>;
+type MutableCategory = Omit<Category, "id" | "createdAt" | "updatedAt">;
+export type CreateCategoryInput = MutableCategory;
+export type UpdateCategoryInput = Partial<MutableCategory>;

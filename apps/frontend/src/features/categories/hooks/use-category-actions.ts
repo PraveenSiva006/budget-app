@@ -1,5 +1,5 @@
 import { categoryService } from "@/features/categories/category.service";
-import type { UpdateCategoryDTO } from "@budget/contracts";
+import type { UpdateCategoryInput } from "@budget/contracts";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 
 export function useCreateCategory() {
@@ -10,14 +10,14 @@ export function useCreateCategory() {
       queryClient.invalidateQueries({ queryKey: ["categories"] }),
   });
 }
-type UpdateCategoryInput = {
+type UpdateCategoryProps = {
   id: string;
-  payload: UpdateCategoryDTO;
+  payload: UpdateCategoryInput;
 };
 export function useUpdateCategory() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, payload }: UpdateCategoryInput) =>
+    mutationFn: ({ id, payload }: UpdateCategoryProps) =>
       categoryService.update(id, payload),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["categories"] }),

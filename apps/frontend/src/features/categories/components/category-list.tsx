@@ -6,8 +6,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCategoryUIStore } from "@/features/categories/categories.store";
-import { type CategoryDTO } from "@budget/contracts";
+import { type Category } from "@budget/contracts";
+import { transactionTypeUI } from "@budget/config";
+
 import { EllipsisVertical } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import clsx from "clsx";
 
 function CategoryActionMenu({
   actions,
@@ -32,7 +36,7 @@ function CategoryActionMenu({
   );
 }
 
-function CategoryList({ list }: { list: CategoryDTO[] }) {
+function CategoryList({ list }: { list: Category[] }) {
   const { handleActions } = useCategoryUIStore();
 
   return (
@@ -43,9 +47,14 @@ function CategoryList({ list }: { list: CategoryDTO[] }) {
           key={category.id}
         >
           <span className="">{category.name}</span>
-
-          <span className="ml-auto mr-3 text-capitalize text-xs bg-lime-300 px-2 rounded-lg leading-relaxed">
-            {category.type.toLowerCase()}
+          <span
+            className={clsx(
+              "ml-auto mr-3",
+              transactionTypeUI[category.type].bg,
+              transactionTypeUI[category.type].color,
+            )}
+          >
+            {transactionTypeUI[category.type].label}
           </span>
           <CategoryActionMenu
             actions={{

@@ -1,12 +1,12 @@
 import CategoryForm from "@/features/categories/components/form";
 import { useUpdateCategory } from "@/features/categories/hooks/use-category-actions";
-import { updateCategorySchema, type CategoryDTO } from "@budget/contracts";
+import { updateCategorySchema, type Category } from "@budget/contracts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import type z from "zod";
 
 type Props = {
-  category: CategoryDTO;
+  category: Category;
   onSuccess: () => void;
   onCancel: () => void;
 };

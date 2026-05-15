@@ -1,8 +1,8 @@
-import type { CategoryDTO } from "@budget/contracts";
+import type { Category } from "@budget/contracts";
 
 const now = () => new Date().toISOString();
 
-export const categories: CategoryDTO[] = [
+export const categories: Category[] = [
   // INCOME
   {
     id: "1",

@@ -1,8 +1,8 @@
 import { categories } from "@/features/categories/mock/categories.db";
 import type {
-  CategoryDTO,
-  CreateCategoryDTO,
-  UpdateCategoryDTO,
+  Category,
+  CreateCategoryInput,
+  UpdateCategoryInput,
 } from "@budget/contracts";
 
 const delay = (ms = 300) => new Promise((res) => setTimeout(res, ms));
@@ -11,20 +11,20 @@ const generateId = () => crypto.randomUUID();
 const now = () => new Date().toISOString();
 
 export const categoryService = {
-  async getAll(): Promise<CategoryDTO[]> {
+  async getAll(): Promise<Category[]> {
     await delay();
     return [...categories];
   },
 
-  async getById(id: string): Promise<CategoryDTO | null> {
+  async getById(id: string): Promise<Category | null> {
     await delay();
     return categories.find((cat) => cat.id === id) || null;
   },
 
-  async create(payload: CreateCategoryDTO): Promise<CategoryDTO> {
+  async create(payload: CreateCategoryInput): Promise<Category> {
     await delay();
 
-    const newCategory: CategoryDTO = {
+    const newCategory: Category = {
       ...payload,
       id: generateId(),
       createdAt: now(),
@@ -37,8 +37,8 @@ export const categoryService = {
 
   async update(
     id: string,
-    payload: UpdateCategoryDTO,
-  ): Promise<CategoryDTO | null> {
+    payload: UpdateCategoryInput,
+  ): Promise<Category | null> {
     await delay();
 
     const index = categories.findIndex((cat) => cat.id === id);
