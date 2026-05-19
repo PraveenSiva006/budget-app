@@ -4,21 +4,29 @@ export const transactionTypeUI: Record<
   TransactionType,
   {
     label: string;
-    tone: "success" | "danger" | "info";
+    color: string;
+    bg: string;
+    icon: string;
   }
 > = {
   INCOME: {
     label: "Income",
-    tone: "success",
+    color: "text-green-600",
+    bg: "bg-green-100",
+    icon: "arrow-down",
   },
 
   EXPENSE: {
     label: "Expense",
-    tone: "danger",
+    color: "text-red-600",
+    bg: "bg-red-100",
+    icon: "arrow-up",
   },
 
   TRANSFER: {
     label: "Transfer",
-    tone: "info",
+    color: "text-blue-600",
+    bg: "bg-blue-100",
+    icon: "refresh-cw",
   },
 };

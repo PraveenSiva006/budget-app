@@ -7,11 +7,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCategoryUIStore } from "@/features/categories/categories.store";
 import { type Category } from "@budget/contracts";
-import { transactionTypeUI } from "@budget/config";
 
 import { EllipsisVertical } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+
 import clsx from "clsx";
+import { TRANSACTION_UI } from "@/shared/domain/transaction-ui";
+import { Badge } from "@/components/ui/badge";
 
 function CategoryActionMenu({
   actions,
@@ -47,15 +48,15 @@ function CategoryList({ list }: { list: Category[] }) {
           key={category.id}
         >
           <span className="">{category.name}</span>
-          <span
+          <Badge
             className={clsx(
               "ml-auto mr-3",
-              transactionTypeUI[category.type].bg,
-              transactionTypeUI[category.type].color,
+              TRANSACTION_UI[category.type].colors.bg,
+              TRANSACTION_UI[category.type].colors.text,
             )}
           >
-            {transactionTypeUI[category.type].label}
-          </span>
+            {TRANSACTION_UI[category.type].label}
+          </Badge>
           <CategoryActionMenu
             actions={{
               edit: () => {

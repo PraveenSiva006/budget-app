@@ -8,7 +8,7 @@ function Transactions() {
         <TransactionFilter />
       </div>
 
-      <div className="col-span-10">
+      <div className="col-span-10 px-16">
         <TransactionList />
       </div>
     </div>
