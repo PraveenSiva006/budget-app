@@ -159,10 +159,10 @@ export const formatTransactionAmount = ({
   amount,
   type,
 }: {
-  amount: number;
+  amount: string;
   type: TransactionType;
 }) => {
   const config = TRANSACTION_UI[type];
 
-  return `${config.amountPrefix}₹${amount.toLocaleString("en-IN")}`;
+  return `${config.amountPrefix}₹${amount}`;
 };

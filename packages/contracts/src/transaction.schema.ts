@@ -1,43 +1,57 @@
 import * as z from "zod";
 
+/* -------------------------------------------------------------------------- */
+/* ENUMS                                                                      */
+/* -------------------------------------------------------------------------- */
+
 export const transactionTypeEnum = z.enum(["INCOME", "EXPENSE", "TRANSFER"]);
 
-export const createTransactionSchema = z.object({
-  name: z.string().min(2),
-  type: transactionTypeEnum,
-});
+export type TransactionType = z.infer<typeof transactionTypeEnum>;
 
-export const updateTransactionSchema = z.object({
-  id: z.string(),
-  name: z.string().min(2),
-  type: transactionTypeEnum,
-});
+/* -------------------------------------------------------------------------- */
+/* BASE SCHEMA                                                                */
+/* -------------------------------------------------------------------------- */
 
-export const transactionSchema = z.object({
-  id: z.uuid().optional(),
-  userId: z.string().min(1),
+const transactionBaseSchema = z.object({
   accountId: z.string().min(1),
+
   categoryId: z.string().min(1).nullable().optional(),
+
   amount: z.string().regex(/^\d{1,12}(\.\d{1,2})?$/),
+
   type: transactionTypeEnum,
+
   note: z.string().trim().max(1000).nullable().optional(),
+
   occurredAt: z.coerce.date(),
-  createdAt: z.coerce.date().optional(),
 });
 
-/* ---------- TYPES ---------- */
+/* -------------------------------------------------------------------------- */
+/* CREATE                                                                     */
+/* -------------------------------------------------------------------------- */
 
-export interface Transaction {
-  id: string;
-  name: string;
-  type: TransactionType;
-  createdAt: string;
-  updatedAt: string;
-}
+export const createTransactionSchema = transactionBaseSchema;
 
-type MutableTransaction = Omit<Transaction, "id" | "createdAt" | "updatedAt">;
-export type CreateTransactionInput = MutableTransaction;
-export type UpdateTransactionInput = Partial<MutableTransaction>;
+export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 
-type _TransactionType = z.infer<typeof transactionTypeEnum>;
-export type TransactionType = _TransactionType;
+/* -------------------------------------------------------------------------- */
+/* UPDATE                                                                     */
+/* -------------------------------------------------------------------------- */
+
+export const updateTransactionSchema = transactionBaseSchema;
+
+export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* RESPONSE DTO                                                               */
+/* -------------------------------------------------------------------------- */
+
+export const transactionSchema = transactionBaseSchema.extend({
+  id: z.string(),
+
+  createdAt: z.coerce.date(),
+
+  updatedAt: z.coerce.date(),
+});
+
+export type Transaction = z.infer<typeof transactionSchema>;
