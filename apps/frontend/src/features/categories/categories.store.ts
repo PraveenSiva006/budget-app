@@ -4,13 +4,13 @@ import { create } from "zustand";
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "edit"; category: Category };
+  | { mode: "update"; category: Category };
 
 type DeleteConfirmState = { open: false } | { open: true; category: Category };
 
 type Action =
   | { type: "create" }
-  | { type: "edit"; payload: Category }
+  | { type: "update"; payload: Category }
   | { type: "delete"; payload: Category };
 
 type CategoryUIState = {
@@ -32,8 +32,8 @@ export const useCategoryUIStore = create<CategoryUIState>((set) => ({
         set({ form: { mode: "create" } });
         break;
 
-      case "edit":
-        set({ form: { mode: "edit", category: action.payload } });
+      case "update":
+        set({ form: { mode: "update", category: action.payload } });
         break;
 
       case "delete":

@@ -13,7 +13,7 @@ type Props = {
 };
 type UpdateAccountForm = z.infer<typeof updateAccountSchema>;
 
-function AccountEditForm({ onSuccess, onCancel, account }: Props) {
+function AccountUpdateForm({ onSuccess, onCancel, account }: Props) {
   const updateMutation = useUpdateAccount();
 
   const form = useForm<UpdateAccountForm>({
@@ -45,4 +45,4 @@ function AccountEditForm({ onSuccess, onCancel, account }: Props) {
     </FormProvider>
   );
 }
-export default AccountEditForm;
+export default AccountUpdateForm;

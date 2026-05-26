@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import AccountEditForm from "@/features/accounts/ui/forms/edit-form";
+import AccountUpdateForm from "@/features/accounts/ui/forms/update-form";
 import AccountsList from "@/features/accounts/ui/components/account-list";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 import AccountCreateForm from "../forms/create-form";
@@ -45,8 +45,8 @@ function AccountsPage() {
             <DialogDescription>Add or Edit Account</DialogDescription>
           </DialogHeader>
 
-          {form.mode === "edit" ? (
-            <AccountEditForm
+          {form.mode === "update" ? (
+            <AccountUpdateForm
               account={form.account}
               onSuccess={closeForm}
               onCancel={closeForm}

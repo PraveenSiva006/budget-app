@@ -9,7 +9,7 @@ import {
 import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryList from "@/features/categories/components/category-list";
 import CategoryCreateForm from "@/features/categories/components/create-form";
-import CategoryEditForm from "@/features/categories/components/edit-form";
+import CategoryUpdateForm from "@/features/categories/components/update-form";
 
 import {
   useDeleteCategory,
@@ -19,7 +19,7 @@ import {
 import { Plus } from "lucide-react";
 export default function Categories() {
   const { data: categories } = useListCategory();
-  
+
   const deleteMutation = useDeleteCategory();
 
   const { form, closeForm, deleteConfirm, closeDeleteConfirm, handleActions } =
@@ -52,8 +52,8 @@ export default function Categories() {
               {form.mode === "create" ? "Add" : "Edit"} Category
             </DialogDescription>
           </DialogHeader>
-          {form.mode === "edit" ? (
-            <CategoryEditForm
+          {form.mode === "update" ? (
+            <CategoryUpdateForm
               category={form.category}
               onSuccess={closeForm}
               onCancel={closeForm}
