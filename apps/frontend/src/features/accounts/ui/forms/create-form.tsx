@@ -1,20 +1,21 @@
-import { createAccountSchema } from "@budget/contracts";
+import {
+  createAccountSchema,
+  type CreateAccountInput,
+} from "@budget/contracts";
 import { useCreateAccount } from "@/features/accounts/ui/hooks/use-account-actions";
-import z from "zod";
 import AccountFormUI from "./account-form-ui";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useResetMutationOnChange } from "@/lib/form/use-reset-mutation-on-change";
 
 type Props = {
   onSuccess: () => void;
   onCancel: () => void;
 };
-type CreateAccountForm = z.infer<typeof createAccountSchema>;
-
 function AccountCreateForm({ onSuccess, onCancel }: Props) {
   const createMutation = useCreateAccount();
 
-  const form = useForm<CreateAccountForm>({
+  const form = useForm<CreateAccountInput>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: {
       name: "",
@@ -23,6 +24,8 @@ function AccountCreateForm({ onSuccess, onCancel }: Props) {
       currency: "INR",
     },
   });
+
+  useResetMutationOnChange(form, createMutation);
 
   const onSubmit = form.handleSubmit(async (data) => {
     await createMutation.mutateAsync(data);
@@ -37,6 +40,7 @@ function AccountCreateForm({ onSuccess, onCancel }: Props) {
           onCancel,
           onSubmit,
           isSubmitting: form.formState.isSubmitting,
+          submissionError: createMutation.error,
         }}
       />
     </FormProvider>

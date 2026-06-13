@@ -1,16 +1,17 @@
 import * as z from "zod";
-import { TransactionType, transactionTypeEnum } from "./transaction.schema.js";
+
+import { transactionTypeEnum } from "./transaction.schema.js";
+
+/* -------------------------------------------------------------------------- */
+/* SCHEMAS                                                                    */
+/* -------------------------------------------------------------------------- */
 
 export const createCategorySchema = z.object({
   name: z.string().min(2),
   type: transactionTypeEnum,
 });
 
-export const updateCategorySchema = z.object({
-  id: z.string(),
-  name: z.string().min(2),
-  type: transactionTypeEnum,
-});
+export const updateCategorySchema = createCategorySchema;
 
 export const categorySchema = z.object({
   id: z.string(),
@@ -20,16 +21,12 @@ export const categorySchema = z.object({
   updatedAt: z.string(),
 });
 
-/* ---------- TYPES ---------- */
+/* -------------------------------------------------------------------------- */
+/* TYPES                                                                      */
+/* -------------------------------------------------------------------------- */
 
-export interface Category {
-  id: string;
-  name: string;
-  type: TransactionType;
-  createdAt: string;
-  updatedAt: string;
-}
+export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 
-type MutableCategory = Omit<Category, "id" | "createdAt" | "updatedAt">;
-export type CreateCategoryInput = MutableCategory;
-export type UpdateCategoryInput = Partial<MutableCategory>;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
+
+export type Category = z.infer<typeof categorySchema>;

@@ -1,36 +1,38 @@
 import CategoryForm from "@/features/categories/components/form";
 import { useUpdateCategory } from "@/features/categories/hooks/use-category-actions";
-import { updateCategorySchema, type Category } from "@budget/contracts";
+import { useResetMutationOnChange } from "@/lib/form/use-reset-mutation-on-change";
+import {
+  updateCategorySchema,
+  type Category,
+  type UpdateCategoryInput,
+} from "@budget/contracts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import type z from "zod";
-
 type Props = {
   category: Category;
   onSuccess: () => void;
   onCancel: () => void;
 };
 
-type UpdateCategoryForm = z.infer<typeof updateCategorySchema>;
-
 function CategoryEditForm({ category, onSuccess, onCancel }: Props) {
   const updateMutation = useUpdateCategory();
 
-  const form = useForm<UpdateCategoryForm>({
+  const form = useForm<UpdateCategoryInput>({
     resolver: zodResolver(updateCategorySchema),
     defaultValues: {
-      id: category.id,
       name: category.name,
       type: category.type,
     },
   });
 
-  const onSubmit = form.handleSubmit(async (category) => {
+  useResetMutationOnChange(form, updateMutation);
+
+  const onSubmit = form.handleSubmit(async (payload) => {
     await updateMutation.mutateAsync({
       id: category.id,
       payload: {
-        name: category.name,
-        type: category.type,
+        name: payload.name,
+        type: payload.type,
       },
     });
     form.reset();
@@ -44,6 +46,7 @@ function CategoryEditForm({ category, onSuccess, onCancel }: Props) {
           isSubmitting: updateMutation.isPending,
           onSubmit,
           onCancel,
+          submissionError: updateMutation.error,
         }}
       />
     </FormProvider>

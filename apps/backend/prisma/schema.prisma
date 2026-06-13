@@ -47,6 +47,7 @@ model Account {
   user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
 
+  @@unique([userId, name])
   @@index([userId])
 }
 

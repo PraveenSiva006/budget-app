@@ -6,7 +6,6 @@
   "types": "src/index.ts",
   "type": "module",
   "dependencies": {
-    "@budget/contracts": "workspace:*",
-    "@budget/config": "workspace:*"
+    "@budget/contracts": "workspace:*"
   }
 }

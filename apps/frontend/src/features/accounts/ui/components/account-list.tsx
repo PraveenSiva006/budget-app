@@ -10,7 +10,7 @@ function AccountsList({ accounts }: { accounts: Account[] }) {
     <div
       className="grid"
       style={{
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
         gap: "20px",
       }}
     >

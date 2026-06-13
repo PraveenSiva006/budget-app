@@ -1,3 +1,4 @@
+import { FormSubmissionError } from "@/components/common/form-submission-error";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
@@ -7,10 +8,12 @@ function CategoryForm({
   isSubmitting,
   onSubmit,
   onCancel,
+  submissionError,
 }: {
   isSubmitting: boolean;
   onSubmit: () => void;
   onCancel: () => void;
+  submissionError: Error | null;
 }) {
   return (
     <form onSubmit={onSubmit}>
@@ -26,6 +29,8 @@ function CategoryForm({
           ]}
         />
       </FieldGroup>
+      <FormSubmissionError submissionError={submissionError} />
+
       <DialogFooter>
         <Button
           type="button"

@@ -1,63 +1,44 @@
-import { accounts } from "@/features/accounts/mock/accounts.db";
-import type { Account, UpdateAccountInput } from "@budget/contracts";
-
-const delay = (ms = 300) => new Promise((res) => setTimeout(res, ms));
-
-const generateId = () => Date.now().toString();
-const now = () => new Date().toISOString();
+import { apiClient } from "@/lib/api.client";
+import type {
+  Account,
+  CreateAccountInput,
+  UpdateAccountInput,
+} from "@budget/contracts";
 
 export const accountService = {
   async getAll(): Promise<Account[]> {
-    await delay();
-    return [...accounts];
+    const res = await apiClient.get("/accounts");
+    console.log(res);
+    return res.data;
   },
 
   async getById(id: string): Promise<Account | null> {
-    await delay();
-    return accounts.find((acc) => acc.id === id) || null;
+    const res = await apiClient.get("/accounts/" + id);
+    return res.data;
   },
 
-  async create(
-    payload: Omit<Account, "id" | "createdAt" | "updatedAt">,
-  ): Promise<Account> {
-    await delay();
-
-    const newAccount: Account = {
+  async create(payload: CreateAccountInput): Promise<Account> {
+    const res = await apiClient.post("/accounts", {
       ...payload,
-      id: generateId(),
-      createdAt: now(),
-      updatedAt: now(),
-    };
+    });
 
-    accounts.push(newAccount);
-    return newAccount;
+    return res.data;
   },
 
   async update(body: {
     id: string;
     payload: UpdateAccountInput;
   }): Promise<Account | null> {
-    await delay();
-
-    const index = accounts.findIndex((acc) => acc.id === body.id);
-    if (index === -1) return null;
-
-    accounts[index] = {
-      ...accounts[index],
+    const res = await apiClient.patch("/accounts/" + body.id, {
       ...body.payload,
-      updatedAt: now(),
-    };
+    });
 
-    return accounts[index];
+    return res.data;
   },
 
   async delete(id: string): Promise<boolean> {
-    await delay();
+    const res = await apiClient.delete("/accounts/" + id);
 
-    const index = accounts.findIndex((acc) => acc.id === id);
-    if (index === -1) return false;
-
-    accounts.splice(index, 1);
-    return true;
+    return res.data;
   },
 };

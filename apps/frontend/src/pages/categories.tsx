@@ -19,7 +19,7 @@ import {
 import { Plus } from "lucide-react";
 export default function Categories() {
   const { data: categories } = useListCategory();
-  
+
   const deleteMutation = useDeleteCategory();
 
   const { form, closeForm, deleteConfirm, closeDeleteConfirm, handleActions } =

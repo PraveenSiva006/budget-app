@@ -1,11 +1,14 @@
+import { FormSubmissionError } from "@/components/common/form-submission-error";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput, FormSelect } from "@/lib/form";
+import { Loader } from "lucide-react";
 
 type AccountFormUIProps = {
   onSubmit: () => void;
   isSubmitting: boolean;
+  submissionError: Error | null;
   onCancel: () => void;
 };
 
@@ -13,6 +16,7 @@ function AccountFormUI({
   onSubmit,
   isSubmitting,
   onCancel,
+  submissionError,
 }: AccountFormUIProps) {
   return (
     <form onSubmit={onSubmit}>
@@ -47,6 +51,8 @@ function AccountFormUI({
         />
       </FieldGroup>
 
+      <FormSubmissionError submissionError={submissionError} />
+
       <DialogFooter>
         <Button
           type="button"
@@ -57,7 +63,7 @@ function AccountFormUI({
           Cancel
         </Button>
         <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Submitting..." : "Submit"}
+          Submit {isSubmitting && <Loader />}
         </Button>
       </DialogFooter>
     </form>

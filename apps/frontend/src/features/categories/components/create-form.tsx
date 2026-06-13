@@ -1,9 +1,12 @@
 import CategoryForm from "@/features/categories/components/form";
 
 import { useCreateCategory } from "@/features/categories/hooks/use-category-actions";
-import z from "zod";
+import { useResetMutationOnChange } from "@/lib/form/use-reset-mutation-on-change";
 
-import { createCategorySchema } from "@budget/contracts";
+import {
+  createCategorySchema,
+  type CreateCategoryInput,
+} from "@budget/contracts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -11,18 +14,18 @@ type Props = {
   onSuccess: () => void;
   onCancel: () => void;
 };
-type CreateAccountForm = z.infer<typeof createCategorySchema>;
-
 function CategoryCreateForm({ onSuccess, onCancel }: Props) {
   const createMutation = useCreateCategory();
 
-  const form = useForm<CreateAccountForm>({
+  const form = useForm<CreateCategoryInput>({
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
       name: "",
       type: "EXPENSE",
     },
   });
+
+  useResetMutationOnChange(form, createMutation);
 
   const onSubmit = form.handleSubmit(async (category) => {
     await createMutation.mutateAsync({
@@ -40,6 +43,7 @@ function CategoryCreateForm({ onSuccess, onCancel }: Props) {
           isSubmitting: form.formState.isSubmitting,
           onSubmit,
           onCancel,
+          submissionError: createMutation.error,
         }}
       />
     </FormProvider>

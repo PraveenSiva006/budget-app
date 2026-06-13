@@ -4,6 +4,7 @@ import { envSchema } from './config/env.schema';
 import { PrismaModule } from './prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AccountModule } from './modules/account/account.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AppService } from './app.service';
       validate: (env) => envSchema.parse(env),
     }),
     PrismaModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

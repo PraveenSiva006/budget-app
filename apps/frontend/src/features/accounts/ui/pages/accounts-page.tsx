@@ -11,6 +11,7 @@ import AccountsList from "@/features/accounts/ui/components/account-list";
 import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
 import AccountCreateForm from "../forms/create-form";
 import { useDeleteAccount, useGetAccounts } from "../hooks/use-account-actions";
+import { toast } from "sonner";
 
 function AccountsPage() {
   const form = useAccountUIStore((s) => s.form);
@@ -26,6 +27,15 @@ function AccountsPage() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const onCreateSuccess = () => {
+    closeForm();
+    toast.success("Account Created");
+  };
+  const onUpdateSuccess = () => {
+    closeForm();
+    toast.success("Account updated");
+  };
 
   const deleteAccount = async () => {
     if (deleteConfirm.open) {
@@ -48,11 +58,14 @@ function AccountsPage() {
           {form.mode === "edit" ? (
             <AccountEditForm
               account={form.account}
-              onSuccess={closeForm}
+              onSuccess={onUpdateSuccess}
               onCancel={closeForm}
             />
           ) : (
-            <AccountCreateForm onSuccess={closeForm} onCancel={closeForm} />
+            <AccountCreateForm
+              onSuccess={onCreateSuccess}
+              onCancel={closeForm}
+            />
           )}
         </DialogContent>
       </Dialog>

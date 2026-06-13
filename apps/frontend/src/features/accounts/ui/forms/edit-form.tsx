@@ -1,25 +1,27 @@
-import { updateAccountSchema, type Account } from "@budget/contracts";
+import {
+  updateAccountSchema,
+  type Account,
+  type UpdateAccountInput,
+} from "@budget/contracts";
 import { useUpdateAccount } from "@/features/accounts/ui/hooks/use-account-actions";
 
 import AccountFormUI from "./account-form-ui";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import { useResetMutationOnChange } from "@/lib/form/use-reset-mutation-on-change";
 
 type Props = {
   account: Account;
   onSuccess: () => void;
   onCancel: () => void;
 };
-type UpdateAccountForm = z.infer<typeof updateAccountSchema>;
 
 function AccountEditForm({ onSuccess, onCancel, account }: Props) {
   const updateMutation = useUpdateAccount();
 
-  const form = useForm<UpdateAccountForm>({
+  const form = useForm<UpdateAccountInput>({
     resolver: zodResolver(updateAccountSchema),
     defaultValues: {
-      id: account.id,
       name: account.name,
       type: account.type,
       accNumber: account.accNumber ?? "",
@@ -27,8 +29,14 @@ function AccountEditForm({ onSuccess, onCancel, account }: Props) {
     },
   });
 
+  useResetMutationOnChange(form, updateMutation);
+
   const onSubmit = form.handleSubmit(async (data) => {
-    await updateMutation.mutateAsync({ id: account.id, payload: data });
+    const response = await updateMutation.mutateAsync({
+      id: account.id,
+      payload: data,
+    });
+    console.log(response);
     form.reset();
     onSuccess();
   });
@@ -40,6 +48,7 @@ function AccountEditForm({ onSuccess, onCancel, account }: Props) {
           onCancel,
           onSubmit,
           isSubmitting: form.formState.isSubmitting,
+          submissionError: updateMutation.error,
         }}
       />
     </FormProvider>

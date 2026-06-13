@@ -1,4 +1,4 @@
-import { Account as PrismaAccount } from '@/generated/prisma/client';
+import { PrismaAccount } from '@/prisma/prsima.types';
 import { Account } from '@budget/contracts';
 
 export class AccountMapper {
