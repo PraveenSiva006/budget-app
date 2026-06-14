@@ -3,13 +3,13 @@ import { create } from "zustand";
 
 type AccountAction =
   | { type: "create" }
-  | { type: "edit"; payload: Account }
+  | { type: "update"; payload: Account }
   | { type: "delete"; payload: Account };
 
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "edit"; account: Account };
+  | { mode: "update"; account: Account };
 
 type DeleteConfirmState = { open: false } | { open: true; account: Account };
 
@@ -34,9 +34,9 @@ export const useAccountUIStore = create<AccountUIState>((set) => ({
         set({ form: { mode: "create" } });
         break;
 
-      case "edit":
+      case "update":
         set({
-          form: { mode: "edit", account: action.payload },
+          form: { mode: "update", account: action.payload },
         });
         break;
 

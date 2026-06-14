@@ -14,7 +14,7 @@ type Props = {
   onCancel: () => void;
 };
 
-function CategoryEditForm({ category, onSuccess, onCancel }: Props) {
+function CategoryUpdateForm({ category, onSuccess, onCancel }: Props) {
   const updateMutation = useUpdateCategory();
 
   const form = useForm<UpdateCategoryInput>({
@@ -53,4 +53,4 @@ function CategoryEditForm({ category, onSuccess, onCancel }: Props) {
   );
 }
 
-export default CategoryEditForm;
+export default CategoryUpdateForm;

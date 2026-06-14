@@ -4,7 +4,7 @@ import { create } from "zustand";
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "edit"; category: Transaction };
+  | { mode: "update"; category: Transaction };
 
 type DeleteConfirmState =
   | { open: false }
@@ -12,7 +12,7 @@ type DeleteConfirmState =
 
 type Action =
   | { type: "create" }
-  | { type: "edit"; payload: Transaction }
+  | { type: "update"; payload: Transaction }
   | { type: "delete"; payload: Transaction };
 
 type TransactionUIState = {
@@ -34,8 +34,8 @@ export const useTransactionUIStore = create<TransactionUIState>((set) => ({
         set({ form: { mode: "create" } });
         break;
 
-      case "edit":
-        set({ form: { mode: "edit", category: action.payload } });
+      case "update":
+        set({ form: { mode: "update", category: action.payload } });
         break;
 
       case "delete":

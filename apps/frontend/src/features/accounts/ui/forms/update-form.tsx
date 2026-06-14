@@ -16,7 +16,7 @@ type Props = {
   onCancel: () => void;
 };
 
-function AccountEditForm({ onSuccess, onCancel, account }: Props) {
+function AccountUpdateForm({ onSuccess, onCancel, account }: Props) {
   const updateMutation = useUpdateAccount();
 
   const form = useForm<UpdateAccountInput>({
@@ -54,4 +54,4 @@ function AccountEditForm({ onSuccess, onCancel, account }: Props) {
     </FormProvider>
   );
 }
-export default AccountEditForm;
+export default AccountUpdateForm;

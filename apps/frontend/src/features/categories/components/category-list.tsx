@@ -18,7 +18,7 @@ function CategoryActionMenu({
   actions,
 }: {
   actions: {
-    edit: () => void;
+    update: () => void;
     delete: () => void;
   };
 }) {
@@ -30,7 +30,7 @@ function CategoryActionMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-4" align="end">
-        <DropdownMenuItem onClick={actions.edit}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={actions.update}>Edit</DropdownMenuItem>
         <DropdownMenuItem onClick={actions.delete}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -59,8 +59,8 @@ function CategoryList({ list }: { list: Category[] }) {
           </Badge>
           <CategoryActionMenu
             actions={{
-              edit: () => {
-                handleActions({ type: "edit", payload: category });
+              update: () => {
+                handleActions({ type: "update", payload: category });
               },
               delete: () => {
                 handleActions({ type: "delete", payload: category });

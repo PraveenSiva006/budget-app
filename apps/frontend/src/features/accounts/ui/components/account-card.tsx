@@ -66,7 +66,7 @@ function AccountActionMenu({
   actions,
 }: {
   actions: {
-    edit: () => void;
+    update: () => void;
     delete: () => void;
   };
 }) {
@@ -78,7 +78,7 @@ function AccountActionMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-4" align="end">
-        <DropdownMenuItem onClick={actions.edit}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={actions.update}>Edit</DropdownMenuItem>
         <DropdownMenuItem onClick={actions.delete}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -95,7 +95,7 @@ function AccountCard({
   const handleAction = useAccountUIStore((s) => s.handleAction);
 
   const cardActions = {
-    edit: () => handleAction({ type: "edit", payload: account }),
+    update: () => handleAction({ type: "update", payload: account }),
     delete: () => handleAction({ type: "delete", payload: account }),
   };
 
