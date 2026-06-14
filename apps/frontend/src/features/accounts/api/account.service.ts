@@ -1,44 +1,48 @@
 import { apiClient } from "@/lib/api.client";
 import type {
   Account,
+  ApiResponse,
   CreateAccountInput,
   UpdateAccountInput,
 } from "@budget/contracts";
 
 export const accountService = {
   async getAll(): Promise<Account[]> {
-    const res = await apiClient.get("/accounts");
-    console.log(res);
-    return res.data;
+    const res = await apiClient.get<ApiResponse<Account[]>>("/accounts");
+
+    return res.data.data;
   },
 
-  async getById(id: string): Promise<Account | null> {
-    const res = await apiClient.get("/accounts/" + id);
-    return res.data;
+  async getById(id: string): Promise<Account> {
+    const res = await apiClient.get<ApiResponse<Account>>("/accounts/" + id);
+
+    return res.data.data;
   },
 
   async create(payload: CreateAccountInput): Promise<Account> {
-    const res = await apiClient.post("/accounts", {
-      ...payload,
-    });
+    const res = await apiClient.post<ApiResponse<Account>>(
+      "/accounts",
+      payload,
+    );
 
-    return res.data;
+    return res.data.data;
   },
 
   async update(body: {
     id: string;
     payload: UpdateAccountInput;
-  }): Promise<Account | null> {
-    const res = await apiClient.patch("/accounts/" + body.id, {
-      ...body.payload,
-    });
+  }): Promise<Account> {
+    const res = await apiClient.patch<ApiResponse<Account>>(
+      "/accounts/" + body.id,
+      body.payload,
+    );
 
-    return res.data;
+    return res.data.data;
   },
 
-  async delete(id: string): Promise<boolean> {
-    const res = await apiClient.delete("/accounts/" + id);
+  async delete(id: string): Promise<Account> {
+    const res = await apiClient.delete<ApiResponse<Account>>("/accounts/" + id);
 
-    return res.data;
+    return res.data.data;
   },
 };
