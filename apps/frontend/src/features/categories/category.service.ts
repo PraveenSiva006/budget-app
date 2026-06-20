@@ -1,65 +1,50 @@
-import { categories } from "@/features/categories/mock/categories.db";
+import { apiClient } from "@/lib/api.client";
 import type {
   Category,
+  ApiResponse,
   CreateCategoryInput,
   UpdateCategoryInput,
 } from "@budget/contracts";
 
-const delay = (ms = 300) => new Promise((res) => setTimeout(res, ms));
-
-const generateId = () => crypto.randomUUID();
-const now = () => new Date().toISOString();
-
 export const categoryService = {
   async getAll(): Promise<Category[]> {
-    await delay();
-    return [...categories];
+    const res = await apiClient.get<ApiResponse<Category[]>>("/categories");
+
+    return res.data.data;
   },
 
-  async getById(id: string): Promise<Category | null> {
-    await delay();
-    return categories.find((cat) => cat.id === id) || null;
+  async getById(id: string): Promise<Category> {
+    const res = await apiClient.get<ApiResponse<Category>>("/categories/" + id);
+
+    return res.data.data;
   },
 
   async create(payload: CreateCategoryInput): Promise<Category> {
-    await delay();
+    const res = await apiClient.post<ApiResponse<Category>>(
+      "/categories",
+      payload,
+    );
 
-    const newCategory: Category = {
-      ...payload,
-      id: generateId(),
-      createdAt: now(),
-      updatedAt: now(),
-    };
-
-    categories.push(newCategory);
-    return newCategory;
+    return res.data.data;
   },
 
-  async update(
-    id: string,
-    payload: UpdateCategoryInput,
-  ): Promise<Category | null> {
-    await delay();
+  async update(body: {
+    id: string;
+    payload: UpdateCategoryInput;
+  }): Promise<Category> {
+    const res = await apiClient.patch<ApiResponse<Category>>(
+      "/categories/" + body.id,
+      body.payload,
+    );
 
-    const index = categories.findIndex((cat) => cat.id === id);
-    if (index === -1) return null;
-
-    categories[index] = {
-      ...categories[index],
-      ...payload,
-      updatedAt: now(),
-    };
-
-    return categories[index];
+    return res.data.data;
   },
 
-  async delete(id: string): Promise<boolean> {
-    await delay();
+  async delete(id: string): Promise<Category> {
+    const res = await apiClient.delete<ApiResponse<Category>>(
+      "/categories/" + id,
+    );
 
-    const index = categories.findIndex((cat) => cat.id === id);
-    if (index === -1) return false;
-
-    categories.splice(index, 1);
-    return true;
+    return res.data.data;
   },
 };

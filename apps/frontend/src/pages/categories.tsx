@@ -26,8 +26,12 @@ export default function Categories() {
     useCategoryUIStore();
 
   const onDelete = async () => {
-    if (deleteConfirm.open)
-      await deleteMutation.mutateAsync(deleteConfirm.category.id);
+    try {
+      if (deleteConfirm.open)
+        await deleteMutation.mutateAsync(deleteConfirm.category.id);
+    } catch (error) {
+      console.error(error);
+    }
     closeDeleteConfirm();
   };
 

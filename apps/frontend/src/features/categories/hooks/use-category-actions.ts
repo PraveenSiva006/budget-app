@@ -18,7 +18,7 @@ export function useUpdateCategory() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, payload }: UpdateCategoryProps) =>
-      categoryService.update(id, payload),
+      categoryService.update({ id, payload }),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["categories"] }),
   });

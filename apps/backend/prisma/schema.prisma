@@ -47,6 +47,7 @@ model Account {
   user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
 
+  @@unique([id, userId])
   @@unique([userId, name])
   @@index([userId])
 }
@@ -57,11 +58,13 @@ model Category {
   name      String
   type      TransactionType
   createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 
   user                 User                  @relation(fields: [userId], references: [id])
   transactions         Transaction[]
   budgetCategoryLimits BudgetCategoryLimit[]
 
+  @@unique([id, userId])
   @@unique([userId, name])
   @@index([userId])
 }
@@ -81,6 +84,7 @@ model Transaction {
   account  Account   @relation(fields: [accountId], references: [id])
   category Category? @relation(fields: [categoryId], references: [id])
 
+  @@unique([id, userId])
   @@index([userId, occurredAt])
   @@index([accountId])
   @@index([categoryId])
@@ -97,6 +101,7 @@ model MonthlyBudget {
   user           User                  @relation(fields: [userId], references: [id])
   categoryLimits BudgetCategoryLimit[]
 
+  @@unique([id, userId])
   @@unique([userId, month, year])
   @@index([userId])
 }
