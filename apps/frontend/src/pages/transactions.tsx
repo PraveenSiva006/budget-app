@@ -1,7 +1,15 @@
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import TransactionCreateForm from "@/features/transactions/components/create-form";
 import TransactionFilter from "@/features/transactions/components/filter";
-import TransactionForm from "@/features/transactions/components/form";
 import TransactionList from "@/features/transactions/components/transaction-list";
+import TransactionUpdateForm from "@/features/transactions/components/update-form";
 import { useTransactionUIStore } from "@/features/transactions/transaction.store";
 import { useGetTransactions } from "@/features/transactions/use-transaction-actions";
 
@@ -25,7 +33,29 @@ function Transactions() {
           <Button onClick={closeForm}>Close</Button>
 
           <TransactionList list={transactions!} />
-          {form.mode === "create" && <TransactionForm />}
+
+          <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
+            <DialogContent className="sm:max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Transaction</DialogTitle>
+                <DialogDescription>
+                  {form.mode === "create" ? "Add" : "Edit"} Transaction
+                </DialogDescription>
+              </DialogHeader>
+              {form.mode === "update" ? (
+                <TransactionUpdateForm
+                  transaction={form.transaction}
+                  onSuccess={closeForm}
+                  onCancel={closeForm}
+                />
+              ) : (
+                <TransactionCreateForm
+                  onSuccess={closeForm}
+                  onCancel={closeForm}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       )}
     </div>

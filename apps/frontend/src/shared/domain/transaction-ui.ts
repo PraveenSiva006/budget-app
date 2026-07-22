@@ -159,7 +159,7 @@ export const formatTransactionAmount = ({
   amount,
   type,
 }: {
-  amount: string;
+  amount: number;
   type: TransactionType;
 }) => {
   const config = TRANSACTION_UI[type];

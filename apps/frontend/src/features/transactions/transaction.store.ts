@@ -4,11 +4,11 @@ import { create } from "zustand";
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "update"; category: Transaction };
+  | { mode: "update"; transaction: Transaction };
 
 type DeleteConfirmState =
   | { open: false }
-  | { open: true; category: Transaction };
+  | { open: true; transaction: Transaction };
 
 type Action =
   | { type: "create" }
@@ -35,11 +35,11 @@ export const useTransactionUIStore = create<TransactionUIState>((set) => ({
         break;
 
       case "update":
-        set({ form: { mode: "update", category: action.payload } });
+        set({ form: { mode: "update", transaction: action.payload } });
         break;
 
       case "delete":
-        set({ deleteConfirm: { open: true, category: action.payload } });
+        set({ deleteConfirm: { open: true, transaction: action.payload } });
         break;
     }
   },

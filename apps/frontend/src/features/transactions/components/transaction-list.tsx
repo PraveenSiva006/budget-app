@@ -11,7 +11,7 @@ export default function TransactionList({ list }: { list: Transaction[] }) {
   return (
     <div className="flex flex-col gap-3">
       {list.map((transaction) => (
-        <div className="border flex bg-accent items-center px-6 py-4 rounded-lg">
+        <div className="border flex bg-neutral-50 dark:bg-gray-900 items-center px-6 py-4 rounded-lg">
           <div className="w-1/3">
             <div>{transaction.categoryId}</div>
             <div>{transaction.type}</div>

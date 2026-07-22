@@ -68,7 +68,7 @@ export class CategoryService {
 
     const category = await this.prisma.category.delete({
       where: {
-        id: '1000',
+        id,
         userId,
       },
     });

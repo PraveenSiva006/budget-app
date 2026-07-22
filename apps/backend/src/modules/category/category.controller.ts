@@ -21,7 +21,7 @@ export class CategoryController {
   constructor(private readonly service: CategoryService) {}
 
   @Get()
-  async getCategorys(
+  async getCategories(
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Category[]>> {
     return {

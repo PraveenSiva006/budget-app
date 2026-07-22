@@ -1,82 +1,53 @@
-// transaction.service.ts
-
-import { mockTransactions } from "@/features/transactions/mock";
+import { apiClient } from "@/lib/api.client";
 import type {
-  CreateTransactionInput,
   Transaction,
+  ApiResponse,
+  CreateTransactionInput,
   UpdateTransactionInput,
 } from "@budget/contracts";
 
-const delay = (ms = 300) => new Promise((res) => setTimeout(res, ms));
-
-const generateId = () => crypto.randomUUID();
-const now = () => new Date().toISOString();
-
 export const transactionService = {
   async getAll(): Promise<Transaction[]> {
-    await delay();
+    const res =
+      await apiClient.get<ApiResponse<Transaction[]>>("/transactions");
 
-    return [...mockTransactions].sort(
-      (a, b) =>
-        new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime(),
-    );
+    return res.data.data;
   },
 
-  async getById(id: string): Promise<Transaction | null> {
-    await delay();
+  async getById(id: string): Promise<Transaction> {
+    const res = await apiClient.get<ApiResponse<Transaction>>(
+      "/transactions/" + id,
+    );
 
-    return mockTransactions.find((txn: Transaction) => txn.id === id) || null;
+    return res.data.data;
   },
 
   async create(payload: CreateTransactionInput): Promise<Transaction> {
-    await delay();
-
-    const newTransaction: Transaction = {
-      ...payload,
-
-      id: generateId(),
-
-      createdAt: now(),
-
-      occurredAt: payload.occurredAt ?? now(),
-    };
-
-    mockTransactions.unshift(newTransaction);
-
-    return newTransaction;
-  },
-
-  async update(
-    id: string,
-    payload: UpdateTransactionInput,
-  ): Promise<Transaction | null> {
-    await delay();
-
-    const index = mockTransactions.findIndex(
-      (txn: Transaction) => txn.id === id,
+    const res = await apiClient.post<ApiResponse<Transaction>>(
+      "/transactions",
+      payload,
     );
 
-    if (index === -1) return null;
-
-    mockTransactions[index] = {
-      ...mockTransactions[index],
-      ...payload,
-    };
-
-    return mockTransactions[index];
+    return res.data.data;
   },
 
-  async delete(id: string): Promise<boolean> {
-    await delay();
-
-    const index = mockTransactions.findIndex(
-      (txn: Transaction) => txn.id === id,
+  async update(body: {
+    id: string;
+    payload: UpdateTransactionInput;
+  }): Promise<Transaction> {
+    const res = await apiClient.patch<ApiResponse<Transaction>>(
+      "/transactions/" + body.id,
+      body.payload,
     );
 
-    if (index === -1) return false;
+    return res.data.data;
+  },
 
-    mockTransactions.splice(index, 1);
+  async delete(id: string): Promise<Transaction> {
+    const res = await apiClient.delete<ApiResponse<Transaction>>(
+      "/transactions/" + id,
+    );
 
-    return true;
+    return res.data.data;
   },
 };

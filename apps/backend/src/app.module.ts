@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AccountModule } from './modules/account/account.module';
 import { CategoryModule } from './modules/category/category.module';
+import { TransactionModule } from './modules/transaction/transaction.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CategoryModule } from './modules/category/category.module';
     PrismaModule,
     AccountModule,
     CategoryModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

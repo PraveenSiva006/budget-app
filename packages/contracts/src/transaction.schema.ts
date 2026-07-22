@@ -17,13 +17,13 @@ const transactionBaseSchema = z.object({
 
   categoryId: z.string().min(1).nullable().optional(),
 
-  amount: z.string().regex(/^\d{1,12}(\.\d{1,2})?$/),
+  amount: z.number(),
 
   type: transactionTypeEnum,
 
   note: z.string().trim().max(1000).nullable().optional(),
 
-  occurredAt: z.coerce.date(),
+  occurredAt: z.string(),
 });
 
 /* -------------------------------------------------------------------------- */
@@ -49,9 +49,9 @@ export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
 export const transactionSchema = transactionBaseSchema.extend({
   id: z.string(),
 
-  createdAt: z.coerce.date(),
+  createdAt: z.string(),
 
-  updatedAt: z.coerce.date(),
+  // updatedAt: z.string(),
 });
 
 export type Transaction = z.infer<typeof transactionSchema>;
