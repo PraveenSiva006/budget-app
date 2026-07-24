@@ -133,3 +133,8 @@
     text-transform: capitalize;
   }
 }
+@layer components {
+  .app-container {
+    @apply container px-5;
+  }
+}

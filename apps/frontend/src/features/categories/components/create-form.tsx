@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 
 type Props = {
-  onSuccess: () => void;
+  onSuccess: (persistForm?: boolean) => void;
   onCancel: () => void;
 };
 function CategoryCreateForm({ onSuccess, onCancel }: Props) {
@@ -27,14 +27,16 @@ function CategoryCreateForm({ onSuccess, onCancel }: Props) {
 
   useResetMutationOnChange(form, createMutation);
 
-  const onSubmit = form.handleSubmit(async (category) => {
-    await createMutation.mutateAsync({
-      name: category.name,
-      type: category.type,
+  const onSubmit = (persistForm?: boolean) => {
+    form.handleSubmit(async (category) => {
+      await createMutation.mutateAsync({
+        name: category.name,
+        type: category.type,
+      });
+      form.reset();
+      onSuccess(persistForm);
     });
-    form.reset();
-    onSuccess();
-  });
+  };
 
   return (
     <FormProvider {...form}>

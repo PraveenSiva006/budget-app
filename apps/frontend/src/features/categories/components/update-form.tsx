@@ -8,9 +8,10 @@ import {
 } from "@budget/contracts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+
 type Props = {
   category: Category;
-  onSuccess: () => void;
+  onSuccess: (shouldPersist?: boolean) => void;
   onCancel: () => void;
 };
 
@@ -27,18 +28,19 @@ function CategoryUpdateForm({ category, onSuccess, onCancel }: Props) {
 
   useResetMutationOnChange(form, updateMutation);
 
-  const onSubmit = form.handleSubmit(async (payload) => {
-    await updateMutation.mutateAsync({
-      id: category.id,
-      payload: {
-        name: payload.name,
-        type: payload.type,
-      },
+  const onSubmit = (persistForm?: boolean) => {
+    form.handleSubmit(async (payload) => {
+      await updateMutation.mutateAsync({
+        id: category.id,
+        payload: {
+          name: payload.name,
+          type: payload.type,
+        },
+      });
+      form.reset();
+      onSuccess(persistForm);
     });
-    form.reset();
-    onSuccess();
-  });
-
+  };
   return (
     <FormProvider {...form}>
       <CategoryForm

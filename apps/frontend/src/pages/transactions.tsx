@@ -22,13 +22,13 @@ function Transactions() {
   const closeForm = useTransactionUIStore((state) => state.closeForm);
 
   return (
-    <div className="grid grid-cols-12">
+    <div className="grid grid-cols-12 app-container mx-auto">
       <div className="col-span-2">
         <TransactionFilter />
       </div>
 
       {!isLoading && (
-        <div className="col-span-10 px-16">
+        <div className="col-span-10 pl-16">
           <Button onClick={() => handleActions({ type: "create" })}>Add</Button>
           <Button onClick={closeForm}>Close</Button>
 

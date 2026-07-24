@@ -17,6 +17,7 @@ import {
 } from "@/features/categories/hooks/use-category-actions";
 
 import { Plus } from "lucide-react";
+
 export default function Categories() {
   const { data: categories } = useListCategory();
 
@@ -35,8 +36,12 @@ export default function Categories() {
     closeDeleteConfirm();
   };
 
+  const onFormSuccess = (shouldPersist?: boolean) => {
+    if (!shouldPersist) closeForm();
+  };
+
   return (
-    <div className="py-5 px-24">
+    <div className="py-5 app-container mx-auto">
       <div className="mb-2 font-semibold flex justify-between">
         <span>Categories</span>
         <Button
@@ -59,7 +64,7 @@ export default function Categories() {
           {form.mode === "update" ? (
             <CategoryUpdateForm
               category={form.category}
-              onSuccess={closeForm}
+              onSuccess={onFormSuccess}
               onCancel={closeForm}
             />
           ) : (

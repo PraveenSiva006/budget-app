@@ -25,7 +25,7 @@ function AccountsPage() {
   const { data, isLoading } = useGetAccounts();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="app-container mx-auto">Loading...</div>;
   }
 
   const onCreateSuccess = () => {
@@ -45,7 +45,7 @@ function AccountsPage() {
   };
 
   return (
-    <div className="px-20 pt-9 ">
+    <div className="app-container mx-auto pt-9">
       <AccountsList accounts={data!} />
 
       <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>

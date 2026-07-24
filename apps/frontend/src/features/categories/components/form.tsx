@@ -11,12 +11,12 @@ function CategoryForm({
   submissionError,
 }: {
   isSubmitting: boolean;
-  onSubmit: () => void;
+  onSubmit: (persistForm?: boolean) => void;
   onCancel: () => void;
   submissionError: Error | null;
 }) {
   return (
-    <form onSubmit={onSubmit}>
+    <form>
       <FieldGroup className="grid md:grid-cols-6 gap-4 mb-6">
         <FormInput name="name" label="Category name" />
         <FormSelect
@@ -40,8 +40,22 @@ function CategoryForm({
         >
           Cancel
         </Button>
-        <Button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Submitting..." : "Submit"}
+        <Button
+          type="button"
+          onClick={() => onSubmit()}
+          disabled={isSubmitting}
+        >
+          Save
+        </Button>
+
+        <Button
+          type="submit"
+          onClick={() => {
+            onSubmit(true);
+          }}
+          disabled={isSubmitting}
+        >
+          Save & Add Another
         </Button>
       </DialogFooter>
     </form>
