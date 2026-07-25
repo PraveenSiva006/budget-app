@@ -1,7 +1,7 @@
 import AccountsRef from "@/features/accounts/AccountsReference";
 import AppLayout from "@/components/layout/AppLayout";
 import {
-  AccountsPage,
+  Accounts,
   Dashboard,
   LoginPage,
   Categories,
@@ -16,7 +16,7 @@ const createAppRouter = () =>
       Component: AppLayout,
       children: [
         { index: true, Component: Dashboard },
-        { path: "accounts", Component: AccountsPage },
+        { path: "accounts", Component: Accounts },
         { path: "categories", Component: Categories },
         { path: "transactions", Component: Transactions },
         {

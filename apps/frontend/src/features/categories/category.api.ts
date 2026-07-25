@@ -6,7 +6,7 @@ import type {
   UpdateCategoryInput,
 } from "@budget/contracts";
 
-export const categoryService = {
+export const categoryApi = {
   async getAll(): Promise<Category[]> {
     const res = await apiClient.get<ApiResponse<Category[]>>("/categories");
 

@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryList from "@/features/categories/components/category-list";
-import CategoryCreateForm from "@/features/categories/components/create-form";
-import CategoryUpdateForm from "@/features/categories/components/update-form";
+import CategoryCreateForm from "@/features/categories/components/create-category";
+import UpdateCategory from "@/features/categories/components/update-category";
 
 import {
   useDeleteCategory,
@@ -36,10 +36,6 @@ export default function Categories() {
     closeDeleteConfirm();
   };
 
-  const onFormSuccess = (shouldPersist?: boolean) => {
-    if (!shouldPersist) closeForm();
-  };
-
   return (
     <div className="py-5 app-container mx-auto">
       <div className="mb-2 font-semibold flex justify-between">
@@ -62,13 +58,9 @@ export default function Categories() {
             </DialogDescription>
           </DialogHeader>
           {form.mode === "update" ? (
-            <CategoryUpdateForm
-              category={form.category}
-              onSuccess={onFormSuccess}
-              onCancel={closeForm}
-            />
+            <UpdateCategory category={form.category} onClose={closeForm} />
           ) : (
-            <CategoryCreateForm onSuccess={closeForm} onCancel={closeForm} />
+            <CategoryCreateForm onClose={closeForm} />
           )}
         </DialogContent>
       </Dialog>

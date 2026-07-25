@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
-import AccountCard from "@/features/accounts/ui/components/account-card";
-import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
+import AccountCard from "@/features/accounts/components/account-card";
+import { useAccountUIStore } from "@/features/accounts/account.store";
 import type { Account } from "@budget/contracts";
 
 function AccountsList({ accounts }: { accounts: Account[] }) {

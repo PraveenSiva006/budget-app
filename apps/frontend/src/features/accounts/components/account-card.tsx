@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 
-import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
+import { useAccountUIStore } from "@/features/accounts/account.store";
 
 import { cn } from "@/lib/utils";
 import type { Account, AccountType } from "@budget/contracts";

@@ -6,12 +6,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import AccountUpdateForm from "@/features/accounts/ui/forms/update-form";
-import AccountsList from "@/features/accounts/ui/components/account-list";
-import { useAccountUIStore } from "@/features/accounts/ui/store/accounts.store";
-import AccountCreateForm from "../forms/create-form";
-import { useDeleteAccount, useGetAccounts } from "../hooks/use-account-actions";
-import { toast } from "sonner";
+
+import AccountUpdate from "@/features/accounts/components/update-account";
+import AccountCreate from "../features/accounts/components/create-account";
+import AccountsList from "@/features/accounts/components/account-list";
+
+import { useAccountUIStore } from "@/features/accounts/account.store";
+import {
+  useDeleteAccount,
+  useGetAccounts,
+} from "../features/accounts/hooks/use-account-actions";
 
 function AccountsPage() {
   const form = useAccountUIStore((s) => s.form);
@@ -27,15 +31,6 @@ function AccountsPage() {
   if (isLoading) {
     return <div className="app-container mx-auto">Loading...</div>;
   }
-
-  const onCreateSuccess = () => {
-    closeForm();
-    toast.success("Account Created");
-  };
-  const onUpdateSuccess = () => {
-    closeForm();
-    toast.success("Account updated");
-  };
 
   const deleteAccount = async () => {
     if (deleteConfirm.open) {
@@ -56,16 +51,9 @@ function AccountsPage() {
           </DialogHeader>
 
           {form.mode === "update" ? (
-            <AccountUpdateForm
-              account={form.account}
-              onSuccess={onUpdateSuccess}
-              onCancel={closeForm}
-            />
+            <AccountUpdate account={form.account} onClose={closeForm} />
           ) : (
-            <AccountCreateForm
-              onSuccess={onCreateSuccess}
-              onCancel={closeForm}
-            />
+            <AccountCreate onClose={closeForm} />
           )}
         </DialogContent>
       </Dialog>

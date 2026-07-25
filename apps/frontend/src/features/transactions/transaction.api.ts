@@ -6,7 +6,7 @@ import type {
   UpdateTransactionInput,
 } from "@budget/contracts";
 
-export const transactionService = {
+export const transactionApi = {
   async getAll(): Promise<Transaction[]> {
     const res =
       await apiClient.get<ApiResponse<Transaction[]>>("/transactions");

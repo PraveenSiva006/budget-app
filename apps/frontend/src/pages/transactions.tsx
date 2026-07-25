@@ -6,10 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import TransactionCreateForm from "@/features/transactions/components/create-form";
+import CreateTransaction from "@/features/transactions/components/create-transaction";
 import TransactionFilter from "@/features/transactions/components/filter";
 import TransactionList from "@/features/transactions/components/transaction-list";
-import TransactionUpdateForm from "@/features/transactions/components/update-form";
+import UpdateTransaction from "@/features/transactions/components/update-transaction";
 import { useTransactionUIStore } from "@/features/transactions/transaction.store";
 import { useGetTransactions } from "@/features/transactions/use-transaction-actions";
 
@@ -43,16 +43,13 @@ function Transactions() {
                 </DialogDescription>
               </DialogHeader>
               {form.mode === "update" ? (
-                <TransactionUpdateForm
+                <UpdateTransaction
                   transaction={form.transaction}
                   onSuccess={closeForm}
                   onCancel={closeForm}
                 />
               ) : (
-                <TransactionCreateForm
-                  onSuccess={closeForm}
-                  onCancel={closeForm}
-                />
+                <CreateTransaction onSuccess={closeForm} onCancel={closeForm} />
               )}
             </DialogContent>
           </Dialog>

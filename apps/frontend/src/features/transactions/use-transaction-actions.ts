@@ -1,9 +1,9 @@
-import { transactionService } from "@/features/transactions/transaction.service";
+import { transactionApi } from "@/features/transactions/transaction.api";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetTransactions = () => {
   return useQuery({
     queryKey: ["transaction"],
-    queryFn: transactionService.getAll,
+    queryFn: transactionApi.getAll,
   });
 };

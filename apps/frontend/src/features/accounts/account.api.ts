@@ -6,7 +6,7 @@ import type {
   UpdateAccountInput,
 } from "@budget/contracts";
 
-export const accountService = {
+export const accountApi = {
   async getAll(): Promise<Account[]> {
     const res = await apiClient.get<ApiResponse<Account[]>>("/accounts");
 
