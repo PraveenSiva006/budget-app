@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import {
   createTransactionSchema,
+  TransactionTypeValues,
   type CreateTransactionInput,
 } from "@budget/contracts";
 
@@ -16,6 +17,8 @@ import { FormSubmissionError } from "@/components/common/form-submission-error";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 
+import { useAccountDropdown, useCategoryDropdown } from "@/hooks/use-dropdown";
+
 type Props = {
   onClose: () => void;
 };
@@ -23,19 +26,25 @@ type Props = {
 function CreateTransaction({ onClose }: Props) {
   const mutation = useCreateTransaction();
 
+  const expenseValue = TransactionTypeValues.EXPENSE;
+
   const form = useForm<CreateTransactionInput>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues: {
-      accountId: "1",
-      amount: 100,
-      categoryId: "1",
+      fromAccountId: "",
+      toAccountId: null,
+      amount: "",
+      categoryId: "",
       note: "",
-      occurredAt: "10/10/2026",
-      type: "EXPENSE",
+      occurredAt: new Date().toISOString(),
+      type: expenseValue,
     },
   });
 
   useResetMutationOnChange(form, mutation);
+
+  const { data: accountsOptions } = useAccountDropdown();
+  const { data: categoriesOptions } = useCategoryDropdown();
 
   const onSave = form.handleSubmit(async (payload) => {
     await mutation.mutateAsync(payload);
@@ -45,32 +54,27 @@ function CreateTransaction({ onClose }: Props) {
 
   const onSaveAndNew = form.handleSubmit(async (payload) => {
     await mutation.mutateAsync(payload);
-
+    form.reset();
     toast.success("Transaction created");
   });
 
   return (
     <FormProvider {...form}>
       <form onSubmit={onSave}>
-        <TransactionForm />
+        <TransactionForm
+          accounts={accountsOptions!}
+          categories={categoriesOptions!}
+        />
 
         <FormSubmissionError submissionError={mutation.error} />
 
         <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={mutation.isPending}
-          >
-            Cancel
-          </Button>
-
           <Button type="submit" disabled={mutation.isPending}>
             Save
           </Button>
 
           <Button
+            variant="outline"
             type="button"
             onClick={onSaveAndNew}
             disabled={mutation.isPending}

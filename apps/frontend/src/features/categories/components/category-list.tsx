@@ -10,10 +10,6 @@ import { type Category } from "@budget/contracts";
 
 import { EllipsisVertical } from "lucide-react";
 
-import clsx from "clsx";
-import { TRANSACTION_UI } from "@/shared/domain/transaction-ui";
-import { Badge } from "@/components/ui/badge";
-
 function CategoryActionMenu({
   actions,
 }: {
@@ -47,16 +43,8 @@ function CategoryList({ list }: { list: Category[] }) {
           className="border rounded p-3 flex items-center bg-neutral-50 dark:bg-gray-900"
           key={category.id}
         >
-          <span className="">{category.name}</span>
-          <Badge
-            className={clsx(
-              "ml-auto mr-3",
-              TRANSACTION_UI[category.type].colors.bg,
-              TRANSACTION_UI[category.type].colors.text,
-            )}
-          >
-            {TRANSACTION_UI[category.type].label}
-          </Badge>
+          <span className="mr-auto">{category.name}</span>
+
           <CategoryActionMenu
             actions={{
               update: () => {

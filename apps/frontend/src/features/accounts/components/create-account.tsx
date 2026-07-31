@@ -29,7 +29,7 @@ function AccountCreate({ onClose }: Props) {
     defaultValues: {
       name: "",
       type: "BANK",
-      accNumber: "",
+      accountNumber: "",
       currency: "INR",
     },
   });

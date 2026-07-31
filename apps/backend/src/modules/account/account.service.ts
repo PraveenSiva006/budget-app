@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import {
   Account,
   CreateAccountInput,
+  DropdownOption,
   UpdateAccountInput,
 } from '@budget/contracts';
 import { AccountMapper } from './account.mapper';
@@ -17,6 +18,17 @@ export class AccountService {
     });
 
     return accounts.map(AccountMapper.toDTO);
+  }
+
+  async getAccountOptions(userId: string): Promise<DropdownOption[]> {
+    const accounts = await this.prisma.account.findMany({
+      where: { userId },
+    });
+
+    return accounts.map((account) => ({
+      value: account.id,
+      label: account.name,
+    }));
   }
 
   async getAccountById(id: string, userId: string): Promise<Account> {

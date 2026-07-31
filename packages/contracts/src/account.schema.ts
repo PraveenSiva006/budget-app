@@ -12,7 +12,7 @@ export type AccountType = z.infer<typeof accountTypeEnum>;
 export const createAccountSchema = z.object({
   name: z.string().min(2),
   type: accountTypeEnum,
-  accNumber: z.string().optional(),
+  accountNumber: z.string().optional(),
   currency: z.string().min(1),
 });
 
@@ -26,7 +26,7 @@ export const accountSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
   type: accountTypeEnum,
-  accNumber: z.string().nullable(),
+  accountNumber: z.string().nullable(),
   currency: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),

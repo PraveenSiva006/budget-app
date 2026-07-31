@@ -23,7 +23,7 @@ function AccountForm() {
       />
 
       <FormInput
-        name="accNumber"
+        name="accountNumber"
         type="number"
         label="Account Number"
         placeholder="eg: your 12 digit acc number"

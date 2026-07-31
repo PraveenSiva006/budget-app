@@ -5,17 +5,20 @@ import {
   UpdateTransactionInput,
 } from '@budget/contracts';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TransactionMapper } from './transaction.mapper';
+import { TransactionListMapper, TransactionMapper } from './transaction.mapper';
+import { transactionListInclude } from '@/modules/transaction/transaction.queries';
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly prisma: PrismaService) {}
+
   async getTransactions(userId: string): Promise<Transaction[]> {
     const transactions = await this.prisma.transaction.findMany({
       where: { userId },
+      include: transactionListInclude,
     });
 
-    return transactions.map(TransactionMapper.toDTO);
+    return transactions.map(TransactionListMapper.toDTO);
   }
 
   async getTransactionById(id: string, userId: string): Promise<Transaction> {
@@ -24,13 +27,14 @@ export class TransactionService {
         id,
         userId,
       },
+      include: transactionListInclude,
     });
 
     if (!transaction) {
       throw new NotFoundException('Transaction not found');
     }
 
-    return TransactionMapper.toDTO(transaction);
+    return TransactionListMapper.toDTO(transaction);
   }
 
   async createTransaction(

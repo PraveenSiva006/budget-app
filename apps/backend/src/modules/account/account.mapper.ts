@@ -8,7 +8,7 @@ export class AccountMapper {
       name: a.name,
       type: a.type,
       currency: a.currency,
-      accNumber: a.accNumber,
+      accountNumber: a.accountNumber,
       createdAt: a.createdAt.toISOString(),
       updatedAt: a.updatedAt.toISOString(),
     };

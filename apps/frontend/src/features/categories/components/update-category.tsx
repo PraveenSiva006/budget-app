@@ -23,7 +23,6 @@ function UpdateCategory({ category, onClose }: Props) {
     resolver: zodResolver(updateCategorySchema),
     defaultValues: {
       name: category.name,
-      type: category.type,
     },
   });
 

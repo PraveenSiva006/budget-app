@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import {
   Category,
   CreateCategoryInput,
+  DropdownOption,
   UpdateCategoryInput,
 } from '@budget/contracts';
 import { CategoryMapper } from './category.mapper';
@@ -17,6 +18,17 @@ export class CategoryService {
     });
 
     return categories.map(CategoryMapper.toDTO);
+  }
+
+  async getCategoryOptions(userId: string): Promise<DropdownOption[]> {
+    const categories = await this.prisma.category.findMany({
+      where: { userId },
+    });
+
+    return categories.map((category) => ({
+      value: category.id,
+      label: category.name,
+    }));
   }
 
   async getCategoryById(id: string, userId: string): Promise<Category> {

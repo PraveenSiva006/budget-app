@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,14 +9,13 @@ import CreateTransaction from "@/features/transactions/components/create-transac
 import TransactionFilter from "@/features/transactions/components/filter";
 import TransactionList from "@/features/transactions/components/transaction-list";
 import UpdateTransaction from "@/features/transactions/components/update-transaction";
+import { useListTransaction } from "@/features/transactions/hooks/use-transaction-actions";
 import { useTransactionUIStore } from "@/features/transactions/transaction.store";
-import { useGetTransactions } from "@/features/transactions/use-transaction-actions";
 
 function Transactions() {
-  const { data: transactions, isLoading } = useGetTransactions();
+  const { data: transactions, isLoading } = useListTransaction();
 
   const form = useTransactionUIStore((state) => state.form);
-  const handleActions = useTransactionUIStore((state) => state.handleActions);
 
   const closeForm = useTransactionUIStore((state) => state.closeForm);
 
@@ -29,9 +27,6 @@ function Transactions() {
 
       {!isLoading && (
         <div className="col-span-10 pl-16">
-          <Button onClick={() => handleActions({ type: "create" })}>Add</Button>
-          <Button onClick={closeForm}>Close</Button>
-
           <TransactionList list={transactions!} />
 
           <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
@@ -45,11 +40,10 @@ function Transactions() {
               {form.mode === "update" ? (
                 <UpdateTransaction
                   transaction={form.transaction}
-                  onSuccess={closeForm}
-                  onCancel={closeForm}
+                  onClose={closeForm}
                 />
               ) : (
-                <CreateTransaction onSuccess={closeForm} onCancel={closeForm} />
+                <CreateTransaction onClose={closeForm} />
               )}
             </DialogContent>
           </Dialog>

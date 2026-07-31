@@ -23,7 +23,6 @@ function CreateCategory({ onClose }: Props) {
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
       name: "",
-      type: "EXPENSE",
     },
   });
 

@@ -12,6 +12,7 @@ import {
   Account,
   ApiResponse,
   CreateAccountInput,
+  DropdownOption,
   UpdateAccountInput,
 } from '@budget/contracts';
 import { AccountService } from './account.service';
@@ -26,6 +27,15 @@ export class AccountController {
   ): Promise<ApiResponse<Account[]>> {
     return {
       data: await this.service.getAccounts(userId),
+    };
+  }
+
+  @Get('dropdown-options')
+  async getAccountOptions(
+    @Headers('x-user-id') userId: string,
+  ): Promise<ApiResponse<DropdownOption[]>> {
+    return {
+      data: await this.service.getAccountOptions(userId),
     };
   }
 

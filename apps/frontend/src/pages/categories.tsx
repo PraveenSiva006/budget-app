@@ -19,7 +19,7 @@ import {
 import { Plus } from "lucide-react";
 
 export default function Categories() {
-  const { data: categories } = useListCategory();
+  const { data: categories, isLoading } = useListCategory();
 
   const deleteMutation = useDeleteCategory();
 
@@ -47,7 +47,7 @@ export default function Categories() {
           <Plus />
         </Button>
       </div>
-      <CategoryList list={categories} />
+      {!isLoading && <CategoryList list={categories} />}
 
       <Dialog open={form.mode !== "closed"} onOpenChange={closeForm}>
         <DialogContent className="sm:max-w-sm">

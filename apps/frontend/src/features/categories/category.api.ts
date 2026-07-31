@@ -4,11 +4,19 @@ import type {
   ApiResponse,
   CreateCategoryInput,
   UpdateCategoryInput,
+  DropdownOption,
 } from "@budget/contracts";
 
 export const categoryApi = {
   async getAll(): Promise<Category[]> {
     const res = await apiClient.get<ApiResponse<Category[]>>("/categories");
+
+    return res.data.data;
+  },
+  async getDropdownOptions(): Promise<DropdownOption[]> {
+    const res = await apiClient.get<ApiResponse<DropdownOption[]>>(
+      "/categories/dropdown-options",
+    );
 
     return res.data.data;
   },

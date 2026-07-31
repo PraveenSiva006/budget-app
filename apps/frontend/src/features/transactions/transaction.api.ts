@@ -4,18 +4,21 @@ import type {
   ApiResponse,
   CreateTransactionInput,
   UpdateTransactionInput,
+  TransactionWithRelations,
 } from "@budget/contracts";
 
 export const transactionApi = {
-  async getAll(): Promise<Transaction[]> {
+  async getAll(): Promise<TransactionWithRelations[]> {
     const res =
-      await apiClient.get<ApiResponse<Transaction[]>>("/transactions");
+      await apiClient.get<ApiResponse<TransactionWithRelations[]>>(
+        "/transactions",
+      );
 
     return res.data.data;
   },
 
-  async getById(id: string): Promise<Transaction> {
-    const res = await apiClient.get<ApiResponse<Transaction>>(
+  async getById(id: string): Promise<TransactionWithRelations> {
+    const res = await apiClient.get<ApiResponse<TransactionWithRelations>>(
       "/transactions/" + id,
     );
 

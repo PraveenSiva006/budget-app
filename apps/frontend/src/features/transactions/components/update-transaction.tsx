@@ -16,6 +16,7 @@ import { useResetMutationOnChange } from "@/lib/form/use-reset-mutation-on-chang
 import { FormSubmissionError } from "@/components/common/form-submission-error";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
+import { useAccountDropdown, useCategoryDropdown } from "@/hooks/use-dropdown";
 
 type Props = {
   transaction: Transaction;
@@ -28,7 +29,7 @@ function UpdateTransaction({ transaction, onClose }: Props) {
   const form = useForm<UpdateTransactionInput>({
     resolver: zodResolver(updateTransactionSchema),
     defaultValues: {
-      accountId: transaction.accountId,
+      fromAccountId: transaction.fromAccountId,
       amount: transaction.amount,
       categoryId: transaction.categoryId ?? "",
       note: transaction.note ?? "",
@@ -38,6 +39,9 @@ function UpdateTransaction({ transaction, onClose }: Props) {
   });
 
   useResetMutationOnChange(form, mutation);
+
+  const { data: accountsOptions } = useAccountDropdown();
+  const { data: categoriesOptions } = useCategoryDropdown();
 
   const onSave = form.handleSubmit(async (payload) => {
     await mutation.mutateAsync({
@@ -52,20 +56,14 @@ function UpdateTransaction({ transaction, onClose }: Props) {
   return (
     <FormProvider {...form}>
       <form onSubmit={onSave}>
-        <TransactionForm />
+        <TransactionForm
+          accounts={accountsOptions!}
+          categories={categoriesOptions!}
+        />
 
         <FormSubmissionError submissionError={mutation.error} />
 
         <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={mutation.isPending}
-          >
-            Cancel
-          </Button>
-
           <Button type="submit" disabled={mutation.isPending}>
             Save
           </Button>

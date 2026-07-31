@@ -119,7 +119,7 @@ function AccountCard({
         </span>
       </div>
       <div className="font-mono flex items-center tracking-widest h-16">
-        {account.accNumber}
+        {account.accountNumber}
       </div>
       <div className=" flex justify-between items-end mt-auto">
         <div>

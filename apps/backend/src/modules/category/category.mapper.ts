@@ -6,7 +6,6 @@ export class CategoryMapper {
     return {
       id: a.id,
       name: a.name,
-      type: a.type,
       createdAt: a.createdAt.toISOString(),
       updatedAt: a.updatedAt.toISOString(),
     };

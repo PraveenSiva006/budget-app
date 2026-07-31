@@ -3,12 +3,21 @@ import type {
   Account,
   ApiResponse,
   CreateAccountInput,
+  DropdownOption,
   UpdateAccountInput,
 } from "@budget/contracts";
 
 export const accountApi = {
   async getAll(): Promise<Account[]> {
     const res = await apiClient.get<ApiResponse<Account[]>>("/accounts");
+
+    return res.data.data;
+  },
+
+  async getDropdownOptions(): Promise<DropdownOption[]> {
+    const res = await apiClient.get<ApiResponse<DropdownOption[]>>(
+      "/accounts/dropdown-options",
+    );
 
     return res.data.data;
   },

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import DatePicker from "@/components/common/DatePicker";
+import DatePicker from "@/components/common/date-picker";
 
 export default function Dashboard() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());

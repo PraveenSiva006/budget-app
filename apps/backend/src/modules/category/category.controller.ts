@@ -13,6 +13,7 @@ import {
   ApiResponse,
   CreateCategoryInput,
   UpdateCategoryInput,
+  DropdownOption,
 } from '@budget/contracts';
 import { CategoryService } from './category.service';
 
@@ -26,6 +27,15 @@ export class CategoryController {
   ): Promise<ApiResponse<Category[]>> {
     return {
       data: await this.service.getCategories(userId),
+    };
+  }
+
+  @Get('dropdown-options')
+  async getCategoryOptions(
+    @Headers('x-user-id') userId: string,
+  ): Promise<ApiResponse<DropdownOption[]>> {
+    return {
+      data: await this.service.getCategoryOptions(userId),
     };
   }
 

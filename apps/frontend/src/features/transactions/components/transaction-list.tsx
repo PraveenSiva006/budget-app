@@ -1,22 +1,36 @@
+import { useTransactionUIStore } from "@/features/transactions/transaction.store";
 import {
   formatTransactionAmount,
   TRANSACTION_UI,
 } from "@/shared/domain/transaction-ui";
-import type { Transaction } from "@budget/contracts";
+import type { TransactionWithRelations } from "@budget/contracts";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { ChevronRight } from "lucide-react";
 
-export default function TransactionList({ list }: { list: Transaction[] }) {
+export default function TransactionList({
+  list,
+}: {
+  list: TransactionWithRelations[];
+}) {
+  const handleActions = useTransactionUIStore((state) => state.handleActions);
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 py-3">
       {list.map((transaction) => (
-        <div className="border flex bg-neutral-50 dark:bg-gray-900 items-center px-6 py-4 rounded-lg">
+        <div
+          className="border flex bg-neutral-50 hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-neutral-900 items-center px-6 py-2 rounded-md cursor-pointer"
+          onClick={() =>
+            handleActions({ type: "update", payload: transaction })
+          }
+          key={transaction.id}
+        >
           <div className="w-1/3">
-            <div>{transaction.categoryId}</div>
-            <div>{transaction.type}</div>
+            <div>{transaction.category?.name}</div>
           </div>
-          <div>{transaction.accountId}</div>
+          <div>{transaction.fromAccount.name}</div>
+          <div className="ml-48 text-gray-600 font-light">
+            {transaction.note}
+          </div>
           <div className="ml-auto mr-5 text-end">
             <div className={clsx(TRANSACTION_UI[transaction.type].colors.text)}>
               {formatTransactionAmount({
@@ -24,7 +38,7 @@ export default function TransactionList({ list }: { list: Transaction[] }) {
                 type: transaction.type,
               })}
             </div>
-            <div className="text-sm">
+            <div className="text-sm text-gray-500">
               {format(
                 transaction.occurredAt?.toString(),
                 "dd/mm/yyyy hh:MM aa",

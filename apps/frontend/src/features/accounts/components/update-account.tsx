@@ -31,7 +31,7 @@ function AccountUpdate({ account, onClose }: Props) {
     defaultValues: {
       name: account.name,
       type: account.type,
-      accNumber: account.accNumber ?? "",
+      accountNumber: account.accountNumber ?? "",
       currency: account.currency,
     },
   });
