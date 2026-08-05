@@ -25,6 +25,7 @@ export class AccountController {
   async getAccounts(
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Account[]>> {
+    this.service.getBalances(userId);
     return {
       data: await this.service.getAccounts(userId),
     };

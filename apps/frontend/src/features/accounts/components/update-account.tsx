@@ -33,6 +33,7 @@ function AccountUpdate({ account, onClose }: Props) {
       type: account.type,
       accountNumber: account.accountNumber ?? "",
       currency: account.currency,
+      openingBalance: account.openingBalance,
     },
   });
 

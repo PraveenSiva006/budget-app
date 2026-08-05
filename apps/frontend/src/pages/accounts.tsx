@@ -16,6 +16,7 @@ import {
   useDeleteAccount,
   useGetAccounts,
 } from "../features/accounts/hooks/use-account-actions";
+import { toast } from "sonner";
 
 function AccountsPage() {
   const form = useAccountUIStore((s) => s.form);
@@ -34,8 +35,12 @@ function AccountsPage() {
 
   const deleteAccount = async () => {
     if (deleteConfirm.open) {
-      await deleteMutation.mutateAsync(deleteConfirm.account.id);
-      closeDeleteConfirm();
+      try {
+        await deleteMutation.mutateAsync(deleteConfirm.account.id);
+        closeDeleteConfirm();
+      } catch (error: any) {
+        toast.error(error.message);
+      }
     }
   };
 

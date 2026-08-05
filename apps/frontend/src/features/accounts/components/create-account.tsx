@@ -26,21 +26,19 @@ function AccountCreate({ onClose }: Props) {
 
   const form = useForm<CreateAccountInput>({
     resolver: zodResolver(createAccountSchema),
-    defaultValues: {
-      name: "",
-      type: "BANK",
-      accountNumber: "",
-      currency: "INR",
-    },
   });
 
   useResetMutationOnChange(form, mutation);
 
   const onSave = form.handleSubmit(async (payload) => {
-    await mutation.mutateAsync(payload);
+    try {
+      await mutation.mutateAsync(payload);
 
-    toast.success("Account created");
-    onClose();
+      toast.success("Account created");
+      onClose();
+    } catch (error: any) {
+      toast.success(error.message);
+    }
   });
 
   return (

@@ -13,6 +13,11 @@ export const createAccountSchema = z.object({
   name: z.string().min(2),
   type: accountTypeEnum,
   accountNumber: z.string().optional(),
+  openingBalance: z
+    .string()
+    .trim()
+    .min(1, "Opening balance is required")
+    .regex(/^-?\d+(\.\d{1,2})?$/, "Invalid monetary amount"),
   currency: z.string().min(1),
 });
 
@@ -27,6 +32,7 @@ export const accountSchema = z.object({
   name: z.string().min(1),
   type: accountTypeEnum,
   accountNumber: z.string().nullable(),
+  openingBalance: z.string().regex(/^-?\d+(\.\d{1,2})?$/),
   currency: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),

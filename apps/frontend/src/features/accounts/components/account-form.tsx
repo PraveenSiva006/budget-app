@@ -23,6 +23,12 @@ function AccountForm() {
       />
 
       <FormInput
+        name="openingBalance"
+        label="Initial Amount*"
+        placeholder="Your current balance"
+      />
+
+      <FormInput
         name="accountNumber"
         type="number"
         label="Account Number"

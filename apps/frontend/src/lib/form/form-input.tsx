@@ -1,18 +1,21 @@
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import useFormField from "./use-form-field";
+import type React from "react";
+
+type FormInputProps = React.ComponentProps<"input"> & {
+  name: string;
+  label: string;
+  placeholder?: string;
+};
 
 export default function FormInput({
   name,
   label,
   placeholder,
   type = "text",
-}: {
-  name: string;
-  label: string;
-  placeholder?: string;
-  type?: string;
-}) {
+  ...rest
+}: FormInputProps) {
   const { value, onChange, error, invalid } = useFormField(name);
 
   return (
@@ -26,6 +29,7 @@ export default function FormInput({
         onChange={onChange}
         placeholder={placeholder}
         aria-invalid={invalid}
+        {...rest}
       />
 
       {invalid && <FieldError errors={[error]} className="text-xs" />}

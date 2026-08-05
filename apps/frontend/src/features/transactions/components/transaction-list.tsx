@@ -25,9 +25,22 @@ export default function TransactionList({
           key={transaction.id}
         >
           <div className="w-1/3">
-            <div>{transaction.category?.name}</div>
+            <div>
+              {transaction.type === "TRANSFER"
+                ? "Transfer"
+                : transaction.category?.name}
+            </div>
           </div>
-          <div>{transaction.fromAccount.name}</div>
+
+          <div>
+            {transaction.type === "EXPENSE" && transaction.fromAccount?.name}
+
+            {transaction.type === "INCOME" && transaction.toAccount?.name}
+
+            {transaction.type === "TRANSFER" &&
+              `${transaction.fromAccount?.name} → ${transaction.toAccount?.name}`}
+          </div>
+
           <div className="ml-48 text-gray-600 font-light">
             {transaction.note}
           </div>
@@ -39,10 +52,7 @@ export default function TransactionList({
               })}
             </div>
             <div className="text-sm text-gray-500">
-              {format(
-                transaction.occurredAt?.toString(),
-                "dd/mm/yyyy hh:MM aa",
-              )}
+              {format(transaction.occurredAt, "dd/MM/yyyy hh:mm aa")}
             </div>
           </div>
           <ChevronRight strokeWidth={1.2} />

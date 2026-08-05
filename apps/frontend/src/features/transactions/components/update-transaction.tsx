@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import {
   updateTransactionSchema,
-  type Transaction,
+  type TransactionWithRelations,
   type UpdateTransactionInput,
 } from "@budget/contracts";
 
@@ -19,7 +19,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import { useAccountDropdown, useCategoryDropdown } from "@/hooks/use-dropdown";
 
 type Props = {
-  transaction: Transaction;
+  transaction: TransactionWithRelations;
   onClose: () => void;
 };
 
@@ -29,7 +29,8 @@ function UpdateTransaction({ transaction, onClose }: Props) {
   const form = useForm<UpdateTransactionInput>({
     resolver: zodResolver(updateTransactionSchema),
     defaultValues: {
-      fromAccountId: transaction.fromAccountId,
+      fromAccountId: transaction.fromAccount?.id,
+      toAccountId: transaction.toAccount?.id,
       amount: transaction.amount,
       categoryId: transaction.categoryId ?? "",
       note: transaction.note ?? "",

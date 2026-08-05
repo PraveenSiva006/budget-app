@@ -62,8 +62,8 @@ function CreateTransaction({ onClose }: Props) {
     <FormProvider {...form}>
       <form onSubmit={onSave}>
         <TransactionForm
-          accounts={accountsOptions!}
-          categories={categoriesOptions!}
+          accounts={accountsOptions || []}
+          categories={categoriesOptions || []}
         />
 
         <FormSubmissionError submissionError={mutation.error} />

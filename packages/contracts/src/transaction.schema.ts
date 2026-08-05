@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { moneySchema } from "./common/shared-schema.js";
 
 /* -------------------------------------------------------------------------- */
 /* ENUMS                                                                      */
@@ -12,30 +11,89 @@ export const TransactionTypeValues = transactionTypeEnum.enum;
 export type TransactionType = z.infer<typeof transactionTypeEnum>;
 
 /* -------------------------------------------------------------------------- */
-/* BASE SCHEMA                                                                */
+/* COMMON SCHEMA                                                              */
 /* -------------------------------------------------------------------------- */
 
-const transactionBaseSchema = z.object({
+const amountSchema = z
+  .string()
+  .regex(/^\d+(\.\d{1,2})?$/, "Amount must have at most 2 decimal places")
+  .refine((value) => Number(value) > 0, {
+    message: "Amount must be greater than 0",
+  })
+  .refine(
+    (value) => {
+      const [integerPart] = value.split(".");
+
+      // Decimal(14, 2) = maximum 12 integer digits + 2 decimal digits.
+      return integerPart.length <= 12;
+    },
+    {
+      message: "Amount is too large",
+    },
+  );
+
+const transactionCommonSchema = {
+  amount: amountSchema,
+
+  note: z
+    .string()
+    .trim()
+    .max(1000, "Note cannot exceed 1000 characters")
+    .nullable()
+    .optional(),
+
+  occurredAt: z.iso.datetime({
+    offset: true,
+    message: "Invalid transaction date",
+  }),
+};
+
+/* -------------------------------------------------------------------------- */
+/* TRANSACTION VARIANTS                                                       */
+/* -------------------------------------------------------------------------- */
+
+const incomeTransactionSchema = z.object({
+  type: z.literal("INCOME"),
+
+  fromAccountId: z.null(),
+  toAccountId: z.string().min(1),
+
+  categoryId: z.string().min(1),
+
+  ...transactionCommonSchema,
+});
+
+const expenseTransactionSchema = z.object({
+  type: z.literal("EXPENSE"),
+
   fromAccountId: z.string().min(1),
+  toAccountId: z.null(),
 
-  toAccountId: z.string().min(1).nullable().optional(),
+  categoryId: z.string().min(1),
 
-  categoryId: z.string().min(1).nullable().optional(),
+  ...transactionCommonSchema,
+});
 
-  amount: z.string().regex(/^-?\d+(\.\d{1,2})?$/),
+const transferTransactionSchema = z.object({
+  type: z.literal("TRANSFER"),
 
-  type: transactionTypeEnum,
+  fromAccountId: z.string().min(1),
+  toAccountId: z.string().min(1),
 
-  note: z.string().trim().max(1000).nullable().optional(),
+  categoryId: z.null(),
 
-  occurredAt: z.string(),
+  ...transactionCommonSchema,
 });
 
 /* -------------------------------------------------------------------------- */
 /* CREATE                                                                     */
 /* -------------------------------------------------------------------------- */
 
-export const createTransactionSchema = transactionBaseSchema;
+export const createTransactionSchema = z.discriminatedUnion("type", [
+  incomeTransactionSchema,
+  expenseTransactionSchema,
+  transferTransactionSchema,
+]);
 
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 
@@ -43,7 +101,11 @@ export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
 /* UPDATE                                                                     */
 /* -------------------------------------------------------------------------- */
 
-export const updateTransactionSchema = transactionBaseSchema;
+export const updateTransactionSchema = z.discriminatedUnion("type", [
+  incomeTransactionSchema,
+  expenseTransactionSchema,
+  transferTransactionSchema,
+]);
 
 export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
 
@@ -51,41 +113,52 @@ export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
 /* RESPONSE DTO                                                               */
 /* -------------------------------------------------------------------------- */
 
-export const transactionSchema = transactionBaseSchema.extend({
+export const transactionSchema = z.object({
   id: z.string(),
 
-  createdAt: z.string(),
+  fromAccountId: z.string().nullable(),
+  toAccountId: z.string().nullable(),
+  type: transactionTypeEnum,
+  categoryId: z.string().nullable(),
 
+  amount: amountSchema,
+
+  note: z
+    .string()
+    .trim()
+    .max(1000, "Note cannot exceed 1000 characters")
+    .nullable()
+    .optional(),
+
+  occurredAt: z.string(),
+  createdAt: z.string(),
   updatedAt: z.string(),
 });
 
-const transactionWithRelationsSchema = transactionSchema.extend({
-  fromAccount: z.object({
-    id: z.string(),
+export type Transaction = z.infer<typeof transactionSchema>;
 
-    name: z.string(),
-  }),
+/* -------------------------------------------------------------------------- */
+/* RESPONSE RELATIONS                                                         */
+/* -------------------------------------------------------------------------- */
 
-  toAccount: z
-    .object({
-      id: z.string(),
+const accountRelationSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
 
-      name: z.string(),
-    })
-    .nullable()
-    .optional(),
+const categoryRelationSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
 
-  category: z
-    .object({
-      id: z.string(),
+export const transactionWithRelationsSchema = transactionSchema.extend({
+  fromAccount: accountRelationSchema.nullable(),
 
-      name: z.string(),
-    })
-    .nullable()
-    .optional(),
+  toAccount: accountRelationSchema.nullable(),
+
+  category: categoryRelationSchema.nullable(),
 });
 
 export type TransactionWithRelations = z.infer<
   typeof transactionWithRelationsSchema
 >;
-export type Transaction = z.infer<typeof transactionSchema>;

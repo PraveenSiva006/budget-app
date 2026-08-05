@@ -32,7 +32,9 @@ export class TransactionListMapper {
       toAccount: txn.toAccount
         ? { id: txn.toAccount.id, name: txn.toAccount.name }
         : null,
-      fromAccount: { id: txn.fromAccount.id, name: txn.fromAccount.name },
+      fromAccount: txn.fromAccount
+        ? { id: txn.fromAccount.id, name: txn.fromAccount.name }
+        : null,
       category: txn.category
         ? { id: txn.category.id, name: txn.category.name }
         : null,
