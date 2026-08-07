@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api.client";
 import type {
   Account,
+  AccountWithBalance,
   ApiResponse,
   CreateAccountInput,
   DropdownOption,
@@ -8,8 +9,9 @@ import type {
 } from "@budget/contracts";
 
 export const accountApi = {
-  async getAll(): Promise<Account[]> {
-    const res = await apiClient.get<ApiResponse<Account[]>>("/accounts");
+  async getAll(): Promise<AccountWithBalance[]> {
+    const res =
+      await apiClient.get<ApiResponse<AccountWithBalance[]>>("/accounts");
 
     return res.data.data;
   },

@@ -1,9 +1,9 @@
 import { Card } from "@/components/ui/card";
 import AccountCard from "@/features/accounts/components/account-card";
 import { useAccountUIStore } from "@/features/accounts/account.store";
-import type { Account } from "@budget/contracts";
+import type { AccountWithBalance } from "@budget/contracts";
 
-function AccountsList({ accounts }: { accounts: Account[] }) {
+function AccountsList({ accounts }: { accounts: AccountWithBalance[] }) {
   const handleAction = useAccountUIStore((s) => s.handleAction);
 
   return (

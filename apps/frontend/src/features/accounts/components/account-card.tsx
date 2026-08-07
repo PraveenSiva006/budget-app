@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { useAccountUIStore } from "@/features/accounts/account.store";
 
 import { cn } from "@/lib/utils";
-import type { Account, AccountType } from "@budget/contracts";
+import type { AccountType, AccountWithBalance } from "@budget/contracts";
 
 import clsx from "clsx";
 import { HandCoins, Wallet } from "lucide-react";
@@ -89,7 +89,7 @@ function AccountCard({
   account,
   className,
 }: {
-  account: Account;
+  account: AccountWithBalance;
   className: string;
 }) {
   const handleAction = useAccountUIStore((s) => s.handleAction);
@@ -123,8 +123,8 @@ function AccountCard({
       </div>
       <div className=" flex justify-between items-end mt-auto">
         <div>
-          <div className="text-[10px] uppercase font-semibold">Currency</div>
-          <div className="text-sm font-semibold">{account.currency}</div>
+          <div className="text-[10px] uppercase font-semibold">Balance</div>
+          <div className="text-lg font-mono">{account.balance}</div>
         </div>
         <AccCardBottomIcon cardType={account.type} />
       </div>

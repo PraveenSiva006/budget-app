@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   Account,
+  AccountWithBalance,
   ApiResponse,
   CreateAccountInput,
   DropdownOption,
@@ -24,10 +25,9 @@ export class AccountController {
   @Get()
   async getAccounts(
     @Headers('x-user-id') userId: string,
-  ): Promise<ApiResponse<Account[]>> {
-    this.service.getBalances(userId);
+  ): Promise<ApiResponse<AccountWithBalance[]>> {
     return {
-      data: await this.service.getAccounts(userId),
+      data: await this.service.getAccountsWithBalance(userId),
     };
   }
 

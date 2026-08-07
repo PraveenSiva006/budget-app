@@ -22,21 +22,50 @@ type Props = {
   transaction: TransactionWithRelations;
   onClose: () => void;
 };
+function getTransactionDefaultValues(
+  transaction: TransactionWithRelations,
+): UpdateTransactionInput {
+  const defaultValues = {
+    amount: transaction.amount,
+    note: transaction.note ?? "",
+    occurredAt: transaction.occurredAt,
+  };
 
+  switch (transaction.type) {
+    case "INCOME":
+      return {
+        type: "INCOME",
+        fromAccountId: null,
+        toAccountId: transaction.toAccount?.id ?? "",
+        categoryId: transaction.categoryId ?? "",
+        ...defaultValues,
+      };
+
+    case "EXPENSE":
+      return {
+        type: "EXPENSE",
+        fromAccountId: transaction.fromAccount?.id ?? "",
+        toAccountId: null,
+        categoryId: transaction.categoryId ?? "",
+        ...defaultValues,
+      };
+
+    case "TRANSFER":
+      return {
+        type: "TRANSFER",
+        fromAccountId: transaction.fromAccount?.id ?? "",
+        toAccountId: transaction.toAccount?.id ?? "",
+        categoryId: null,
+        ...defaultValues,
+      };
+  }
+}
 function UpdateTransaction({ transaction, onClose }: Props) {
   const mutation = useUpdateTransaction();
 
   const form = useForm<UpdateTransactionInput>({
     resolver: zodResolver(updateTransactionSchema),
-    defaultValues: {
-      fromAccountId: transaction.fromAccount?.id,
-      toAccountId: transaction.toAccount?.id,
-      amount: transaction.amount,
-      categoryId: transaction.categoryId ?? "",
-      note: transaction.note ?? "",
-      occurredAt: transaction.occurredAt,
-      type: transaction.type,
-    },
+    defaultValues: getTransactionDefaultValues(transaction),
   });
 
   useResetMutationOnChange(form, mutation);
@@ -58,8 +87,8 @@ function UpdateTransaction({ transaction, onClose }: Props) {
     <FormProvider {...form}>
       <form onSubmit={onSave}>
         <TransactionForm
-          accounts={accountsOptions!}
-          categories={categoriesOptions!}
+          accounts={accountsOptions! || []}
+          categories={categoriesOptions! || []}
         />
 
         <FormSubmissionError submissionError={mutation.error} />

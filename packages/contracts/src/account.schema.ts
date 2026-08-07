@@ -39,3 +39,7 @@ export const accountSchema = z.object({
 });
 
 export type Account = z.infer<typeof accountSchema>;
+
+export type AccountWithBalance = Account & {
+  balance: string;
+};
