@@ -1,10 +1,10 @@
-import type { Transaction } from "@budget/contracts";
+import type { Transaction, TransactionWithRelations } from "@budget/contracts";
 import { create } from "zustand";
 
 type FormState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "update"; transaction: Transaction };
+  | { mode: "update"; transaction: TransactionWithRelations };
 
 type DeleteConfirmState =
   | { open: false }
@@ -12,7 +12,7 @@ type DeleteConfirmState =
 
 type Action =
   | { type: "create" }
-  | { type: "update"; payload: Transaction }
+  | { type: "update"; payload: TransactionWithRelations }
   | { type: "delete"; payload: Transaction };
 
 type TransactionUIState = {

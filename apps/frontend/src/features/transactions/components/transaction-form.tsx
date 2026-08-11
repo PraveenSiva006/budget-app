@@ -27,19 +27,13 @@ function TransactionForm({ accounts, categories }: TransactionFormProps) {
   useEffect(() => {
     if (transactionType === "INCOME") {
       setValue("fromAccountId", null);
-      setValue("categoryId", null);
-      setValue("toAccountId", null);
     }
 
     if (transactionType === "EXPENSE") {
-      setValue("fromAccountId", null);
       setValue("toAccountId", null);
-      setValue("categoryId", null);
     }
 
     if (transactionType === "TRANSFER") {
-      setValue("fromAccountId", null);
-      setValue("toAccountId", null);
       setValue("categoryId", null);
     }
   }, [transactionType, setValue]);

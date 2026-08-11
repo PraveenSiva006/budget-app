@@ -67,7 +67,7 @@ function AccountUpdate({ account, onClose }: Props) {
           </Button>
 
           <Button type="submit" disabled={mutation.isPending}>
-            Save {mutation.isPending && <Loader className="animate-spin" />}
+            Save Changes
           </Button>
         </DialogFooter>
       </form>

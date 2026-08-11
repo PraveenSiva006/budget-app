@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,37 +11,18 @@ import AccountCreate from "../features/accounts/components/create-account";
 import AccountsList from "@/features/accounts/components/account-list";
 
 import { useAccountUIStore } from "@/features/accounts/account.store";
-import {
-  useDeleteAccount,
-  useGetAccounts,
-} from "../features/accounts/hooks/use-account-actions";
-import { toast } from "sonner";
+import { useGetAccounts } from "../features/accounts/hooks/use-account-actions";
+import DeleteAccount from "@/features/accounts/components/delete-account";
 
 function AccountsPage() {
   const form = useAccountUIStore((s) => s.form);
   const closeForm = useAccountUIStore((s) => s.closeForm);
-
-  const deleteConfirm = useAccountUIStore((s) => s.deleteConfirm);
-  const closeDeleteConfirm = useAccountUIStore((s) => s.closeDeleteConfirm);
-
-  const deleteMutation = useDeleteAccount();
 
   const { data, isLoading } = useGetAccounts();
 
   if (isLoading) {
     return <div className="app-container mx-auto">Loading...</div>;
   }
-
-  const deleteAccount = async () => {
-    if (deleteConfirm.open) {
-      try {
-        await deleteMutation.mutateAsync(deleteConfirm.account.id);
-        closeDeleteConfirm();
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    }
-  };
 
   return (
     <div className="app-container mx-auto pt-9">
@@ -63,34 +43,7 @@ function AccountsPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={deleteConfirm.open} onOpenChange={closeDeleteConfirm}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Delete Account</DialogTitle>
-            <DialogDescription>
-              Deleting a record is irreversible
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="text-base">Are you sure on deleting this item?</div>
-          <div className="flex justify-end gap-2">
-            <Button
-              variant={"secondary"}
-              onClick={closeDeleteConfirm}
-              disabled={deleteMutation.isPending}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant={"destructive"}
-              onClick={deleteAccount}
-              disabled={deleteMutation.isPending}
-            >
-              Delete
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DeleteAccount />
     </div>
   );
 }

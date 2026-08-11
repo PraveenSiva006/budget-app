@@ -17,6 +17,7 @@ import { FormSubmissionError } from "@/components/common/form-submission-error";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { useAccountDropdown, useCategoryDropdown } from "@/hooks/use-dropdown";
+import { useTransactionUIStore } from "@/features/transactions/transaction.store";
 
 type Props = {
   transaction: TransactionWithRelations;
@@ -63,6 +64,8 @@ function getTransactionDefaultValues(
 function UpdateTransaction({ transaction, onClose }: Props) {
   const mutation = useUpdateTransaction();
 
+  const handleActions = useTransactionUIStore((state) => state.handleActions);
+
   const form = useForm<UpdateTransactionInput>({
     resolver: zodResolver(updateTransactionSchema),
     defaultValues: getTransactionDefaultValues(transaction),
@@ -94,8 +97,18 @@ function UpdateTransaction({ transaction, onClose }: Props) {
         <FormSubmissionError submissionError={mutation.error} />
 
         <DialogFooter>
+          <Button
+            type="button"
+            variant={"destructive"}
+            disabled={mutation.isPending}
+            onClick={() =>
+              handleActions({ type: "delete", payload: transaction })
+            }
+          >
+            Delete
+          </Button>
           <Button type="submit" disabled={mutation.isPending}>
-            Save
+            Save Changes
           </Button>
         </DialogFooter>
       </form>

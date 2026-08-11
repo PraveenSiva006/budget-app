@@ -9,32 +9,17 @@ import {
 import { useCategoryUIStore } from "@/features/categories/categories.store";
 import CategoryList from "@/features/categories/components/category-list";
 import CategoryCreateForm from "@/features/categories/components/create-category";
+import DeleteCategory from "@/features/categories/components/delete-category";
 import UpdateCategory from "@/features/categories/components/update-category";
 
-import {
-  useDeleteCategory,
-  useListCategory,
-} from "@/features/categories/hooks/use-category-actions";
+import { useListCategory } from "@/features/categories/hooks/use-category-actions";
 
 import { Plus } from "lucide-react";
 
 export default function Categories() {
   const { data: categories, isLoading } = useListCategory();
 
-  const deleteMutation = useDeleteCategory();
-
-  const { form, closeForm, deleteConfirm, closeDeleteConfirm, handleActions } =
-    useCategoryUIStore();
-
-  const onDelete = async () => {
-    try {
-      if (deleteConfirm.open)
-        await deleteMutation.mutateAsync(deleteConfirm.category.id);
-    } catch (error) {
-      console.error(error);
-    }
-    closeDeleteConfirm();
-  };
+  const { form, closeForm, handleActions } = useCategoryUIStore();
 
   return (
     <div className="py-5 app-container mx-auto">
@@ -65,36 +50,7 @@ export default function Categories() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={deleteConfirm.open} onOpenChange={closeDeleteConfirm}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Delete Account</DialogTitle>
-            <DialogDescription>
-              Deleting a record is irreversible
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="text-lg font-light">
-            Are you sure on deleting this item?
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button
-              variant={"secondary"}
-              onClick={closeDeleteConfirm}
-              disabled={deleteMutation.isPending}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant={"destructive"}
-              onClick={onDelete}
-              disabled={deleteMutation.isPending}
-            >
-              Delete
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DeleteCategory />
     </div>
   );
 }
