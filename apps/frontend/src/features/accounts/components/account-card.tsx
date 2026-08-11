@@ -124,7 +124,7 @@ function AccountCard({
       <div className=" flex justify-between items-end mt-auto">
         <div>
           <div className="text-[10px] uppercase font-semibold">Balance</div>
-          <div className="text-lg font-mono">{account.balance}</div>
+          <div className="text-lg font-mono">{account.currentBalance}</div>
         </div>
         <AccCardBottomIcon cardType={account.type} />
       </div>

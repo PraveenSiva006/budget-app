@@ -31,7 +31,7 @@ export class AccountService {
       where: { userId },
     });
 
-    const balances = await this.balance.getBalances(userId);
+    const balances = await this.balance.getBalances(accounts, userId);
 
     const balanceMap = new Map(
       balances.map((balance) => [balance.accountId, balance]),

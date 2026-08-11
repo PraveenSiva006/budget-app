@@ -28,7 +28,7 @@ export class AccountWithBalanceMapper {
       type: a.type,
       currency: a.currency,
       openingBalance: String(a.openingBalance),
-      balance: String(balance.currentBalance),
+      currentBalance: String(balance.currentBalance),
       accountNumber: a.accountNumber,
       createdAt: a.createdAt.toISOString(),
       updatedAt: a.updatedAt.toISOString(),

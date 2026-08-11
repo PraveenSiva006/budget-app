@@ -74,16 +74,21 @@ const expenseTransactionSchema = z.object({
   ...transactionCommonSchema,
 });
 
-const transferTransactionSchema = z.object({
-  type: z.literal("TRANSFER"),
+const transferTransactionSchema = z
+  .object({
+    type: z.literal("TRANSFER"),
 
-  fromAccountId: z.string().min(1),
-  toAccountId: z.string().min(1),
+    fromAccountId: z.string().min(1),
+    toAccountId: z.string().min(1),
 
-  categoryId: z.null(),
+    categoryId: z.null(),
 
-  ...transactionCommonSchema,
-});
+    ...transactionCommonSchema,
+  })
+  .refine((data) => data.fromAccountId !== data.toAccountId, {
+    message: "Source and destination accounts must be different",
+    path: ["toAccountId"],
+  });
 
 /* -------------------------------------------------------------------------- */
 /* CREATE                                                                     */

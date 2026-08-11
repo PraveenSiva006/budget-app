@@ -1,31 +1,18 @@
 import { Prisma } from '@/generated/prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaAccount } from '@/prisma/prsima.types';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Decimal } from '@prisma/client/runtime/client';
 
-export interface AccountBalanceSummary {
+export interface AccountBalanceInput {
   accountId: string;
-
   openingBalance: Prisma.Decimal;
-
   income: Prisma.Decimal;
-
   expenses: Prisma.Decimal;
-
   transferIn: Prisma.Decimal;
-
   transferOut: Prisma.Decimal;
-
-  currentBalance: Prisma.Decimal;
 }
-
-interface AccountBalanceInput {
-  accountId: string;
-  openingBalance: Decimal;
-  income: Decimal;
-  expenses: Decimal;
-  transferIn: Decimal;
-  transferOut: Decimal;
+export interface AccountBalanceSummary extends AccountBalanceInput {
+  currentBalance: Prisma.Decimal;
 }
 
 export class AccountBalanceCalculator {
@@ -47,171 +34,180 @@ export class AccountBalanceCalculator {
 export class AccountBalanceService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private async getTransactionAmount(where: Prisma.TransactionWhereInput) {
-    const result = await this.prisma.transaction.aggregate({
-      _sum: {
-        amount: true,
-      },
-      where,
-    });
-
-    return result._sum.amount ?? new Decimal(0);
-  }
-
-  async getBalance(accountId: string): Promise<AccountBalanceSummary> {
-    const account = await this.prisma.account.findUnique({
+  async getBalance(
+    accountId: string,
+    userId: string,
+  ): Promise<AccountBalanceInput> {
+    const account = await this.prisma.account.findFirst({
       where: {
         id: accountId,
+        userId,
       },
     });
+
     if (!account) {
       throw new NotFoundException('Account not found');
     }
 
-    const incomeAmount = await this.getTransactionAmount({
-      type: 'INCOME',
-      toAccountId: account.id,
-    });
+    const [incoming, outgoing] = await Promise.all([
+      this.prisma.transaction.groupBy({
+        by: ['type'],
+        _sum: {
+          amount: true,
+        },
+        where: {
+          userId,
+          toAccountId: accountId,
+          type: {
+            in: ['INCOME', 'TRANSFER'],
+          },
+        },
+      }),
 
-    const expenseAmount = await this.getTransactionAmount({
-      type: 'EXPENSE',
-      fromAccountId: account.id,
-    });
+      this.prisma.transaction.groupBy({
+        by: ['type'],
+        _sum: {
+          amount: true,
+        },
+        where: {
+          userId,
+          fromAccountId: accountId,
+          type: {
+            in: ['EXPENSE', 'TRANSFER'],
+          },
+        },
+      }),
+    ]);
 
-    const transferInAmount = await this.getTransactionAmount({
-      type: 'TRANSFER',
-      toAccountId: account.id,
-    });
+    const income =
+      incoming.find((item) => item.type === 'INCOME')?._sum.amount ??
+      new Prisma.Decimal(0);
 
-    const transferOutAmount = await this.getTransactionAmount({
-      type: 'TRANSFER',
-      fromAccountId: account.id,
-    });
+    const transferIn =
+      incoming.find((item) => item.type === 'TRANSFER')?._sum.amount ??
+      new Prisma.Decimal(0);
 
-    const currentBalance = account.openingBalance
-      .add(incomeAmount)
-      .sub(expenseAmount)
-      .add(transferInAmount)
-      .sub(transferOutAmount);
+    const expenses =
+      outgoing.find((item) => item.type === 'EXPENSE')?._sum.amount ??
+      new Prisma.Decimal(0);
 
-    return {
+    const transferOut =
+      outgoing.find((item) => item.type === 'TRANSFER')?._sum.amount ??
+      new Prisma.Decimal(0);
+
+    return AccountBalanceCalculator.calculate({
       accountId: account.id,
       openingBalance: account.openingBalance,
-      income: incomeAmount,
-      expenses: expenseAmount,
-      transferIn: transferInAmount,
-      transferOut: transferOutAmount,
-      currentBalance,
-    };
+      income,
+      expenses,
+      transferIn,
+      transferOut,
+    });
   }
 
-  async getBalances(userId: string): Promise<AccountBalanceSummary[]> {
-    const accounts = await this.prisma.account.findMany({
-      where: {
-        userId,
-      },
-    });
-
-    const incomeByAccount = await this.prisma.transaction.groupBy({
-      by: ['toAccountId'],
-      _sum: {
-        amount: true,
-      },
-      where: {
-        userId,
-        type: 'INCOME',
-        toAccountId: {
-          not: null,
+  async getBalances(
+    accounts: PrismaAccount[],
+    userId: string,
+  ): Promise<AccountBalanceSummary[]> {
+    const [incomingByAccount, outgoingByAccount] = await Promise.all([
+      this.prisma.transaction.groupBy({
+        by: ['toAccountId', 'type'],
+        _sum: {
+          amount: true,
         },
-      },
-    });
-
-    const expensesByAccount = await this.prisma.transaction.groupBy({
-      by: ['fromAccountId'],
-      _sum: {
-        amount: true,
-      },
-      where: {
-        userId,
-        type: 'EXPENSE',
-        fromAccountId: {
-          not: null,
+        where: {
+          userId,
+          toAccountId: {
+            not: null,
+          },
+          type: {
+            in: ['INCOME', 'TRANSFER'],
+          },
         },
-      },
-    });
+      }),
 
-    const transferInByAccount = await this.prisma.transaction.groupBy({
-      by: ['toAccountId'],
-      _sum: {
-        amount: true,
-      },
-      where: {
-        userId,
-        type: 'TRANSFER',
-        toAccountId: {
-          not: null,
+      this.prisma.transaction.groupBy({
+        by: ['fromAccountId', 'type'],
+        _sum: {
+          amount: true,
         },
-      },
-    });
-
-    const transferOutByAccount = await this.prisma.transaction.groupBy({
-      by: ['fromAccountId'],
-      _sum: {
-        amount: true,
-      },
-      where: {
-        userId,
-        type: 'TRANSFER',
-        fromAccountId: {
-          not: null,
+        where: {
+          userId,
+          fromAccountId: {
+            not: null,
+          },
+          type: {
+            in: ['EXPENSE', 'TRANSFER'],
+          },
         },
-      },
-    });
+      }),
+    ]);
 
-    const incomeMap = new Map(
-      incomeByAccount.map((item) => [
-        item.toAccountId,
-        item._sum.amount ?? new Decimal(0),
-      ]),
-    );
+    const zero = new Prisma.Decimal(0);
 
-    const expenseMap = new Map(
-      expensesByAccount.map((item) => [
-        item.fromAccountId,
-        item._sum.amount ?? new Decimal(0),
-      ]),
-    );
+    const balanceAmounts = new Map<
+      string,
+      {
+        income: Prisma.Decimal;
+        expenses: Prisma.Decimal;
+        transferIn: Prisma.Decimal;
+        transferOut: Prisma.Decimal;
+      }
+    >();
 
-    const transferInMap = new Map(
-      transferInByAccount.map((item) => [
-        item.toAccountId,
-        item._sum.amount ?? new Decimal(0),
-      ]),
-    );
+    for (const item of incomingByAccount) {
+      if (!item.toAccountId) {
+        continue;
+      }
 
-    const transferOutMap = new Map(
-      transferOutByAccount.map((item) => [
-        item.fromAccountId,
-        item._sum.amount ?? new Decimal(0),
-      ]),
-    );
+      const current = balanceAmounts.get(item.toAccountId) ?? {
+        income: zero,
+        expenses: zero,
+        transferIn: zero,
+        transferOut: zero,
+      };
 
-    const balances = accounts.map((account) => {
-      const income = incomeMap.get(account.id) ?? new Decimal(0);
-      const expenses = expenseMap.get(account.id) ?? new Decimal(0);
-      const transferIn = transferInMap.get(account.id) ?? new Decimal(0);
-      const transferOut = transferOutMap.get(account.id) ?? new Decimal(0);
+      if (item.type === 'INCOME') {
+        current.income = item._sum.amount ?? zero;
+      } else if (item.type === 'TRANSFER') {
+        current.transferIn = item._sum.amount ?? zero;
+      }
+
+      balanceAmounts.set(item.toAccountId, current);
+    }
+
+    for (const item of outgoingByAccount) {
+      if (!item.fromAccountId) {
+        continue;
+      }
+
+      const current = balanceAmounts.get(item.fromAccountId) ?? {
+        income: zero,
+        expenses: zero,
+        transferIn: zero,
+        transferOut: zero,
+      };
+
+      if (item.type === 'EXPENSE') {
+        current.expenses = item._sum.amount ?? zero;
+      } else if (item.type === 'TRANSFER') {
+        current.transferOut = item._sum.amount ?? zero;
+      }
+
+      balanceAmounts.set(item.fromAccountId, current);
+    }
+
+    return accounts.map((account) => {
+      const amounts = balanceAmounts.get(account.id);
 
       return AccountBalanceCalculator.calculate({
         accountId: account.id,
         openingBalance: account.openingBalance,
-        income,
-        expenses,
-        transferIn,
-        transferOut,
+        income: amounts?.income ?? zero,
+        expenses: amounts?.expenses ?? zero,
+        transferIn: amounts?.transferIn ?? zero,
+        transferOut: amounts?.transferOut ?? zero,
       });
     });
-
-    return balances;
   }
 }
