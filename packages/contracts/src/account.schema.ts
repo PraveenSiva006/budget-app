@@ -1,13 +1,20 @@
 import * as z from "zod";
 
 export const accountTypeEnum = z.enum([
+  "GENERAL",
   "CASH",
-  "BANK",
-  "CREDIT_CARD",
-  "WALLET",
+  "CHECKING",
+  "SAVINGS",
+  "CREDIT",
+  "INVESTMENT",
+  "LOAN",
+  "MORTGAGE",
+  "OVERDRAFT",
 ]);
 
 export type AccountType = z.infer<typeof accountTypeEnum>;
+
+export const AccountTypeValues = accountTypeEnum.enum;
 
 export const createAccountSchema = z.object({
   name: z.string().min(2),

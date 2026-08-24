@@ -1,7 +1,13 @@
 import { FieldGroup } from "@/components/ui/field";
 import { FormInput, FormSelect } from "@/lib/form";
+import { AccountTypeValues } from "@budget/contracts";
 
 function AccountForm() {
+  const options = Object.values(AccountTypeValues).map((value) => ({
+    value,
+    label: value,
+  }));
+
   return (
     <FieldGroup className="grid md:grid-cols-6 gap-4 mb-6">
       <FormInput
@@ -14,12 +20,7 @@ function AccountForm() {
         name="type"
         label="Account Type*"
         placeholder="Select Account type"
-        options={[
-          { value: "BANK", label: "Bank" },
-          { value: "CREDIT_CARD", label: "Credit Card" },
-          { value: "CASH", label: "Cash" },
-          { value: "WALLET", label: "Wallet" },
-        ]}
+        options={options}
       />
 
       <FormInput

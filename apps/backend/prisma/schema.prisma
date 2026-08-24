@@ -8,10 +8,15 @@ datasource db {
 }
 
 enum AccountType {
+  GENERAL
   CASH
-  BANK
-  CREDIT_CARD
-  WALLET
+  CHECKING
+  SAVINGS
+  CREDIT
+  INVESTMENT
+  LOAN
+  MORTGAGE
+  OVERDRAFT
 }
 
 enum TransactionType {
@@ -50,6 +55,7 @@ model Account {
   outgoingTransactions Transaction[] @relation("TransactionFromAccount")
   incomingTransactions Transaction[] @relation("TransactionToAccount")
 
+  @@unique([id, userId])
   @@unique([userId, name])
   @@index([userId])
 }
@@ -65,6 +71,7 @@ model Category {
   budgetCategoryLimits BudgetCategoryLimit[]
   transactions         Transaction[]
 
+  @@unique([id, userId])
   @@unique([userId, name])
   @@index([userId])
 }
@@ -87,6 +94,7 @@ model Transaction {
   toAccount   Account?  @relation("TransactionToAccount", fields: [toAccountId], references: [id], onDelete: Restrict)
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
+  @@unique([id, userId])
   @@index([userId, occurredAt])
   @@index([fromAccountId])
   @@index([toAccountId])
@@ -104,6 +112,7 @@ model Budget {
   user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   categoryLimits BudgetCategoryLimit[]
 
+  @@unique([id, userId])
   @@unique([userId, month, year])
   @@index([userId])
 }

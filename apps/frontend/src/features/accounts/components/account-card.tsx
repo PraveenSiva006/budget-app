@@ -3,10 +3,8 @@ import { Card } from "@/components/ui/card";
 import { useAccountUIStore } from "@/features/accounts/account.store";
 
 import { cn } from "@/lib/utils";
-import type { AccountType, AccountWithBalance } from "@budget/contracts";
+import type { AccountWithBalance } from "@budget/contracts";
 
-import clsx from "clsx";
-import { HandCoins, Wallet } from "lucide-react";
 import { EllipsisVertical } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,52 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-
-function AccCardBottomIcon({ cardType }: { cardType: AccountType }) {
-  if (cardType === "BANK" || cardType === "CREDIT_CARD") {
-    const circleColors = {
-      BANK: {
-        circleA: "bg-[#e84141]",
-        circleB: "bg-[#f79f1f]",
-      },
-      CREDIT_CARD: {
-        circleA: "bg-gray-200",
-        circleB: "bg-gray-100",
-      },
-    };
-
-    const { circleA, circleB } =
-      circleColors[cardType as keyof typeof circleColors];
-
-    return (
-      <div className="flex">
-        <div
-          className={clsx(
-            "h-7 w-7 rounded-full opacity-85 translate-x-2.5",
-            circleA,
-          )}
-        />
-        <div className={clsx("h-7 w-7 rounded-full opacity-85", circleB)} />
-      </div>
-    );
-  }
-
-  if (cardType === "CASH") {
-    return (
-      <div className="inline-flex items-center justify-center w-9 h-9 bg-green-50 dark:bg-background rounded-full text-green-400">
-        <HandCoins size={22} strokeWidth={0.8} />
-      </div>
-    );
-  }
-
-  if (cardType === "WALLET") {
-    return (
-      <div className="inline-flex items-center justify-center w-9 h-9 bg-purple-50 dark:bg-background rounded-full text-purple-500">
-        <Wallet size={20} strokeWidth={0.8} />
-      </div>
-    );
-  }
-}
+import { AccountIcon } from "@/features/accounts/components/account-card-icon";
 
 function AccountActionMenu({
   actions,
@@ -126,7 +79,7 @@ function AccountCard({
           <div className="text-[10px] uppercase font-semibold">Balance</div>
           <div className="text-lg font-mono">{account.currentBalance}</div>
         </div>
-        <AccCardBottomIcon cardType={account.type} />
+        <AccountIcon cardType={account.type} />
       </div>
     </Card>
   );

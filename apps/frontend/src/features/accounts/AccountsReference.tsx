@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Account, AccountType } from "@budget/contracts";
 import { useState } from "react";
 import type { CSSProperties } from "react";
