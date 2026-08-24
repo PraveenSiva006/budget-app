@@ -47,6 +47,7 @@ export class AccountService {
       return AccountWithBalanceMapper.toDTO(account, balance);
     });
   }
+
   async getAccountOptions(userId: string): Promise<DropdownOption[]> {
     const accounts = await this.prisma.account.findMany({
       where: { userId },
@@ -89,11 +90,10 @@ export class AccountService {
     data: UpdateAccountInput,
     userId: string,
   ): Promise<Account> {
-    await this.getAccountById(id, userId);
-
     const updated = await this.prisma.account.update({
       where: {
         id,
+        userId,
       },
       data,
     });
@@ -107,6 +107,7 @@ export class AccountService {
     await this.prisma.account.delete({
       where: {
         id,
+        userId,
       },
     });
 

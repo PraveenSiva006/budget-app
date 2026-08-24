@@ -13,10 +13,13 @@ import {
   AccountWithBalance,
   ApiResponse,
   CreateAccountInput,
+  createAccountSchema,
   DropdownOption,
   UpdateAccountInput,
+  updateAccountSchema,
 } from '@budget/contracts';
 import { AccountService } from './account.service';
+import { ZodValidationPipe } from '@/common/errors/zod-validation.pipe';
 
 @Controller('accounts')
 export class AccountController {
@@ -42,7 +45,7 @@ export class AccountController {
 
   @Post()
   async createAccount(
-    @Body() dto: CreateAccountInput,
+    @Body(new ZodValidationPipe(createAccountSchema)) dto: CreateAccountInput,
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Account>> {
     return {
@@ -53,7 +56,7 @@ export class AccountController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() dto: UpdateAccountInput,
+    @Body(new ZodValidationPipe(updateAccountSchema)) dto: UpdateAccountInput,
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Account>> {
     return {

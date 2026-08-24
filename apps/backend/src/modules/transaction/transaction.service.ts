@@ -53,8 +53,6 @@ export class TransactionService {
     data: UpdateTransactionInput,
     userId: string,
   ): Promise<Transaction> {
-    // await this.getTransactionById(id, userId);
-
     const updated = await this.prisma.transaction.update({
       where: {
         id,
@@ -67,8 +65,6 @@ export class TransactionService {
   }
 
   async deleteTransaction(id: string, userId: string): Promise<Transaction> {
-    // const transaction = await this.getTransactionById(id, userId);
-
     const transaction = await this.prisma.transaction.delete({
       where: {
         id,

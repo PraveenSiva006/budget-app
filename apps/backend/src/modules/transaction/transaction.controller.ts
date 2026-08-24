@@ -12,9 +12,12 @@ import { TransactionService } from './transaction.service';
 import {
   ApiResponse,
   CreateTransactionInput,
+  createTransactionSchema,
   Transaction,
   UpdateTransactionInput,
+  updateTransactionSchema,
 } from '@budget/contracts';
+import { ZodValidationPipe } from '@/common/errors/zod-validation.pipe';
 
 @Controller('transactions')
 export class TransactionController {
@@ -31,7 +34,8 @@ export class TransactionController {
 
   @Post()
   async createTransaction(
-    @Body() dto: CreateTransactionInput,
+    @Body(new ZodValidationPipe(createTransactionSchema))
+    dto: CreateTransactionInput,
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Transaction>> {
     return {
@@ -42,7 +46,8 @@ export class TransactionController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() dto: UpdateTransactionInput,
+    @Body(new ZodValidationPipe(updateTransactionSchema))
+    dto: UpdateTransactionInput,
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Transaction>> {
     return {

@@ -14,8 +14,11 @@ import {
   CreateCategoryInput,
   UpdateCategoryInput,
   DropdownOption,
+  createCategorySchema,
+  updateCategorySchema,
 } from '@budget/contracts';
 import { CategoryService } from './category.service';
+import { ZodValidationPipe } from '@/common/errors/zod-validation.pipe';
 
 @Controller('categories')
 export class CategoryController {
@@ -41,7 +44,7 @@ export class CategoryController {
 
   @Post()
   async createCategory(
-    @Body() dto: CreateCategoryInput,
+    @Body(new ZodValidationPipe(createCategorySchema)) dto: CreateCategoryInput,
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Category>> {
     return {
@@ -52,7 +55,7 @@ export class CategoryController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() dto: UpdateCategoryInput,
+    @Body(new ZodValidationPipe(updateCategorySchema)) dto: UpdateCategoryInput,
     @Headers('x-user-id') userId: string,
   ): Promise<ApiResponse<Category>> {
     return {

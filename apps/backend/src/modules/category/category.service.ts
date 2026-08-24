@@ -62,8 +62,6 @@ export class CategoryService {
     data: UpdateCategoryInput,
     userId: string,
   ): Promise<Category> {
-    // await this.getCategoryById(id, userId);
-
     const updated = await this.prisma.category.update({
       where: {
         id,
@@ -76,8 +74,6 @@ export class CategoryService {
   }
 
   async deleteCategory(id: string, userId: string): Promise<Category> {
-    // const category = await this.getCategoryById(id, userId);
-
     const category = await this.prisma.category.delete({
       where: {
         id,

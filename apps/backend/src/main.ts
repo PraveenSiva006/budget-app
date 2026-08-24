@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ENV } from './config/env';
-import { PrismaExceptionFilter } from './common/prisma-exception.filter';
+import { HttpExceptionFilter } from './common/errors/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,7 +11,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useGlobalFilters(new PrismaExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(ENV.PORT ?? 3000, '0.0.0.0');
 
